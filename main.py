@@ -18,9 +18,8 @@ tags_metadata=[
 
 app = FastAPI(title="DataScience Course",
               openapi_tags=tags_metadata,
-              contact={"name": "Luis Vallejo", "María Mendoza"
-                       "url": "https://es.linkedin.com/in/isabel-maniega-cuadrado-40a8356b",
-                       "email": "isabelmaniega@hotmail.com",
+              contact={"name": "María Mendoza, Luis Vallejo", 
+                       "email": "?",
                 },
               openapi_url="/api/v0.1/openapi.json")
 
