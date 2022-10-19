@@ -7,7 +7,7 @@ db = connect()
 
 tags_metadata=[
     {
-        "name": "TT",
+        "name": "XXXX",
         "description": "Bienvenida",
     },
     {
