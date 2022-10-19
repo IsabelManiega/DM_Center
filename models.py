@@ -1,7 +1,16 @@
 from pydantic import BaseModel
 
-class User(BaseModel):
-    id: int
-    name: str
-    age: int
-    profesion: str
+class Empleado(BaseModel):
+    numero_empleado: int
+    #Nombre y appelidos
+    nombre: str
+    edad: int
+    
+    #Director
+    cargo: str
+
+    #Ventas
+    departamento: str
+
+    #Mensual
+    salario: float
