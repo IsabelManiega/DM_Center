@@ -1,8 +1,7 @@
 from datetime import date
-import psycopg2 
-from psycopg2 import sql 
+import psycopg2
+from psycopg2 import sql
 from psycopg2.extensions import ISOLATION_LEVEL_AUTOCOMMIT
-import settings
 
 from models import User
 from connection import connect
@@ -27,3 +26,13 @@ createTablaNotas(cur)
 cur.close()
 conn.close()
 
+
+def insertarNotas(cur, nombre:str, edad:int, notas:float, ID:int, fecha:fecha):
+    try:
+        cur.execute(f"INSERT INTO Notas (nombre, edad, notas, ID, fecha) VALUES('{nombre}', {edad}, {notas}, {ID}, {fecha});")
+    except psycopg2.Error as e:
+        print("Error crear registro: %s" % str(e))
+
+def insertNotas(cur, notas):
+    for nota in notas:
+        insertarNotas(cur, nota['nombre'], nota['edad'], nota['notas'], nota['ID'])
