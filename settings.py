@@ -1,3 +1,3 @@
 # Este script nunca debe estar cubierto
-HOST = ""
+HOST = "localhost"
 PORT = 27017
