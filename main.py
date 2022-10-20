@@ -18,7 +18,9 @@ tags_metadata=[
 
 app = FastAPI(title="Base de datos Empleados Fei",
               openapi_tags=tags_metadata,
-              contact={"name": "Belen Aristizabal, Rosana Longares, Adrián Mencias, María Mendoza, Luis Vallejo"},
+              nombres = "Belen Aristizabal, Jessenia Gutierrez, Rosana Longares, "
+              nombres += "Adrián Mencias, María Mendoza, Luis Vallejo"
+              contact={"name": nombres},
               openapi_url="/api/v0.1/openapi.json")
 
 
