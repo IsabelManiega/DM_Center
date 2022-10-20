@@ -25,9 +25,7 @@ app = FastAPI(title="DataScience Course",
                 },
               openapi_url="/api/v0.1/openapi.json")
 
-# Crear un listado:
-database = [{"id": 1, "name": "Juan Perez", "age": 25, "profesion": "Ingeniero"},
-            {"id": 2, "name": "Susana Ruiz", "age": 45, "profesion": "Profesora"}]
+
 
 @app.get("/", tags=["TEST"], description="Mostrar la información de la WEB")
 async def info():
@@ -37,7 +35,20 @@ async def info():
 @app.get("/getData/", status_code=status.HTTP_200_OK, tags=["Users"],
          description="Mostrar todos los usuarios")
 async def show():
-    return database
+    try:
+        datos=[]
+        cur, conn = connect()
+        cur.execute("SELECT * FROM notas;")
+        rows = cur.fetchall()
+        for row in rows:
+            datos.append(row)
+    except psycopg2.Error as e:
+        return "Error mostrar registros: %s" % str(e)
+    finally:
+        cur.close()
+        conn.close()
+        return datos
+
 
 # Mostrar un dato listado: GET
 @app.get("/getData/{item_id}", status_code=status.HTTP_200_OK, tags=["Users"],
