@@ -7,36 +7,44 @@ db = connect()
 
 tags_metadata=[
     {
-        "name": "XXXX",
+        "name": "TEST",
         "description": "Bienvenida",
     },
     {
-        "name": "Users",
-        "description": "Muestra los gestión de los usuarios",
+        "name": "Empleados",
+        "description": "Muestra los gestión de los empleados",
     },
 ]
 
-app = FastAPI(title="DataScience Course",
+app = FastAPI(title="Base de datos Empleados Fei",
               openapi_tags=tags_metadata,
-              contact={"name": "Luis Vallejo", "María Mendoza"
-                       "url": "https://es.linkedin.com/in/isabel-maniega-cuadrado-40a8356b",
-                       "email": "isabelmaniega@hotmail.com",
-                },
+              contact={"name": "Belen Aristizabal, Rosana Longares, Adrián Mencias, María Mendoza, Luis Vallejo"},
               openapi_url="/api/v0.1/openapi.json")
 
-# Crear un listado:
-database = [{"id": 1, "name": "Juan Perez", "age": 25, "profesion": "Ingeniero"},
-            {"id": 2, "name": "Susana Ruiz", "age": 45, "profesion": "Profesora"}]
+
 
 @app.get("/", tags=["TEST"], description="Mostrar la información de la WEB")
 async def info():
     return {"msg": "Bienvenido a nuestra Api Rest"}
 
 # Mostrar el listado: GET
-@app.get("/getData/", status_code=status.HTTP_200_OK, tags=["Users"],
-         description="Mostrar todos los usuarios")
+@app.get("/getData/", status_code=status.HTTP_200_OK, tags=["Empleados"],
+         description="Muestra todos los empleados")
 async def show():
-    return database
+    empleados = db.Empleados.find({})
+    lista_empleados = []
+    for fila in empleados:
+        dict_aux = {
+            "numero_empleado": fila["numero_empleado"],
+            "nombre": fila["nombre"],
+            "edad": fila["edad"],
+            "cargo": fila["cargo"],
+            "departamento": fila["departamento"],
+            "salario": fila["salario"]
+        }
+        lista_empleados.append(dict_aux)
+    return lista_empleados
+        
 
 # Mostrar un dato listado: GET
 @app.get("/getData/{item_id}", status_code=status.HTTP_200_OK, tags=["Users"],
