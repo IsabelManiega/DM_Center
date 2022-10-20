@@ -3,8 +3,32 @@ from fastapi import FastAPI, status, Response
 from models import User
 from connection import connect
 
-# Conexión a base de datos PostgreSQL
-cur, conn = connect()
+# Funciones
+def mostrar(tabla, column, valor, response):
+        # Conexión a base de datos PostgreSQL
+        cur, conn = connect()
+        rows = []
+
+        # Generamos y ejecutamos la query
+        try:
+            query = f"SELECT * FROM {tabla} WHERE {column} = {valor};"
+            cur.execute(query)
+            rows = cur.fetchall()
+        except psycopg2.Error as e:
+            print("Error mostrar registros: %s" % str(e))
+
+        # Actualizamos y cerramos la base de datos
+        conn.commit()
+        cur.close()
+        conn.close()
+
+        # Solo necesario este control para controlar que devuelva valores vacios
+        if rows == []:
+            response.status_code = status.HTTP_404_NOT_FOUND
+            return {"id":valor , f"msg":"User Not Found"}
+        else:
+            response.status_code = status.HTTP_200_OK
+            return rows
 
 tags_metadata=[
     {
@@ -32,7 +56,7 @@ async def info():
     return {"msg": "Bienvenido a nuestra Api Rest"}
 
 # Mostrar el listado: GET
-@app.get("/getData/", status_code=status.HTTP_200_OK, tags=["Users"],
+@app.get("/getData/", status_code=status.HTTP_200_OK, tags=["TERMINADOS"],
          description="Mostrar todos los usuarios")
 async def show():
     try:
@@ -50,26 +74,22 @@ async def show():
         return datos
 
 
-# Mostrar un dato listado: GET
-@app.get("/getData/{item_id}", status_code=status.HTTP_200_OK, tags=["Users"],
-         description="Mostrar un usuario")
-async def showOne(id: int, response: Response):
-    for i in range(0,len(database)):
-        if database[i]["id"] == id:
-            response.status_code = status.HTTP_200_OK
-            return database[i]
-    response.status_code = status.HTTP_404_NOT_FOUND
-    return {"id": id, "msg":"User Not Found"}
+# Mostrar un dato listado: GET ID - CARLOS
+@app.get("/getData/{item_id}", status_code=status.HTTP_200_OK, tags=["TERMINADOS"],
+         description="Mostrar los datos de un usuario")
+async def showOne(id_buscar: int, response: Response):
+    
+    return mostrar("notas", "id", id_buscar, response)
 
 #  Insertar un dato en es listado: POST
-@app.post("/postData/", status_code=status.HTTP_201_CREATED, tags=["Users"],
+@app.post("/postData/", status_code=status.HTTP_201_CREATED, tags=["PENDIENTES"],
           description="Insertar un usuario")
 async def insert(item: User):
     database.append(item.dict())
     return item
 
 # Actualizar un dato del listado: PUT
-@app.put("/putData/{id}", status_code=status.HTTP_200_OK, tags=["Users"],
+@app.put("/putData/{id}", status_code=status.HTTP_200_OK, tags=["PENDIENTES"],
          description="Actualizar un usuario")
 async def update(id: int, item: User, response: Response):
     for i in range(0,len(database)):
@@ -81,7 +101,7 @@ async def update(id: int, item: User, response: Response):
     return {"id": id, "msg":"User Not Found"}
 
 # Eliminar un dato: Delete
-@app.delete("/deleteData/{id}", tags=["Users"],
+@app.delete("/deleteData/{id}", tags=["PENDIENTES"],
             description="Eliminar un usuario")
 async def deleteOne(id: int, response: Response):
     for value in database:
@@ -92,14 +112,11 @@ async def deleteOne(id: int, response: Response):
     response.status_code = status.HTTP_404_NOT_FOUND
     return {"id": id, "msg":"User Not Found"}
 
-@app.delete("/deleteData/", tags=["Users"],
+@app.delete("/deleteData/", tags=["PENDIENTES"],
             description="Eliminar todos usuario")
 async def delete(response: Response):
     database.clear()
     response.status_code = status.HTTP_200_OK
     return {"msg": []}
 
-conn.commit()
 
-cur.close()
-conn.close()
