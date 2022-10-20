@@ -79,14 +79,17 @@ async def update(id: int, item: User, response: Response):
 # Eliminar un dato: Delete
 @app.delete("/deleteData/{id}", tags=["Empleados"],
             description="Eliminar un usuario")
-async def deleteOne(id: int, response: Response):
-    for value in database:
-        if value["id"] == id:
-            database.remove(value)
-            response.status_code = status.HTTP_204_NO_CONTENT
+async def deleteOne(numero_empleado: int, response: Response):
+    datos = db.user.find({})
+    for dato in datos:
+        if dato["numero_empleado"] == numero_empleado:
+            idMongo = dato["_id"]
+            db.user.delete_one({"_id": idMongo})
+            response.status_code = status.HTTP_204_NO_CONTENT           
             return {"item_id": id, "msg": "Eliminado"}
+
     response.status_code = status.HTTP_404_NOT_FOUND
-    return {"id": id, "msg":"User Not Found"}
+    return {"numero_empleado": id, "msg":"User Not Found"}
 
 @app.delete("/deleteData/", tags=["Users"],
             description="Eliminar todos usuario")
