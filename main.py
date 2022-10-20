@@ -1,6 +1,6 @@
 # Crear una Api rest
 from fastapi import FastAPI, status, Response
-from models import User
+from models import Empleado
 from connection import connect
 
 db = connect()
@@ -69,7 +69,7 @@ async def update(id: int, item: User, response: Response):
     return {"id": id, "msg":"User Not Found"}
 
 # Eliminar un dato: Delete
-@app.delete("/deleteData/{id}", tags=["Users"],
+@app.delete("/deleteData/{id}", tags=["Empleados"],
             description="Eliminar un usuario")
 async def deleteOne(id: int, response: Response):
     for value in database:
