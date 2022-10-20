@@ -11,12 +11,12 @@ tags_metadata=[
         "description": "Bienvenida",
     },
     {
-        "name": "Users",
+        "name": "Empleados",
         "description": "Muestra los gestión de los usuarios",
     },
 ]
 
-app = FastAPI(title="DataScience Course",
+app = FastAPI(title="curso",
               openapi_tags=tags_metadata,
               contact={"name": "Luis Vallejo",
                        "url": "https://es.linkedin.com/in/isabel-maniega-cuadrado-40a8356b",
