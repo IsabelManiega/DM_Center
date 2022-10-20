@@ -11,8 +11,8 @@ tags_metadata=[
         "description": "Bienvenida",
     },
     {
-        "name": "Users",
-        "description": "Muestra los gestión de los usuarios",
+        "name": "Empleados",
+        "description": "Muestra los gestión de los empleados",
     },
 ]
 
