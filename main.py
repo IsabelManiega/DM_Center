@@ -115,8 +115,16 @@ async def deleteOne(id: int, response: Response):
 @app.delete("/deleteData/", tags=["PENDIENTES"],
             description="Eliminar todos usuario")
 async def delete(response: Response):
-    database.clear()
+    try:
+        cur, conn = connect()
+        cur.execute("DELETE FROM notas;")
+    except psycopg2.Error as e:
+        return "Error al borrar la tablas: %s" % str(e)
+
+
+    cur.close()
+    conn.close()
     response.status_code = status.HTTP_200_OK
-    return {"msg": []}
+    return {"msg": ["Se ha elimindo los datos correctamente"]}
 
 
