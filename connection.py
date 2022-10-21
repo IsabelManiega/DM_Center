@@ -11,7 +11,7 @@ def connect():
                             host=settings.HOST,
                             port=settings.PORT)
 
-    conn.set_isolation_level(ISOLATION_LEVEL_AUTOCOMMIT)
+    #conn.set_isolation_level(ISOLATION_LEVEL_AUTOCOMMIT)
 
     cur = conn.cursor()
     return cur, conn
