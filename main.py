@@ -57,7 +57,7 @@ async def info():
 
 # Mostrar el listado: GET
 @app.get("/getData/", status_code=status.HTTP_200_OK, tags=["TERMINADOS"],
-         description="Mostrar todos los usuarios")
+         description="Mostrar todos los registros")
 async def show():
     try:
         datos=[]
@@ -76,21 +76,21 @@ async def show():
 
 # Mostrar un dato listado: GET ID - CARLOS
 @app.get("/getData/{item_id}", status_code=status.HTTP_200_OK, tags=["TERMINADOS"],
-         description="Mostrar los datos de un usuario")
+         description="Mostrar los datos de un registro")
 async def showOne(id_buscar: int, response: Response):
     
     return mostrar("notas", "id", id_buscar, response)
 
 #  Insertar un dato en es listado: POST
 @app.post("/postData/", status_code=status.HTTP_201_CREATED, tags=["PENDIENTES"],
-          description="Insertar un usuario")
+          description="Insertar un registro")
 async def insert(item: User):
     database.append(item.dict())
     return item
 
 # Actualizar un dato del listado: PUT
 @app.put("/putData/{id}", status_code=status.HTTP_200_OK, tags=["PENDIENTES"],
-         description="Actualizar un usuario")
+         description="Actualizar un registro")
 async def update(id: int, item: User, response: Response):
     for i in range(0,len(database)):
         if database[i]["id"] == id:
@@ -102,7 +102,7 @@ async def update(id: int, item: User, response: Response):
 
 # Eliminar un dato: Delete
 @app.delete("/deleteData/{id}", tags=["PENDIENTES"],
-            description="Eliminar un usuario")
+            description="Eliminar un registro")
 async def deleteOne(id: int, response: Response):
     for value in database:
         if value["id"] == id:
@@ -112,8 +112,8 @@ async def deleteOne(id: int, response: Response):
     response.status_code = status.HTTP_404_NOT_FOUND
     return {"id": id, "msg":"User Not Found"}
 
-@app.delete("/deleteData/", tags=["PENDIENTES"],
-            description="Eliminar todos usuario")
+@app.delete("/deleteData/", tags=["TERMINADOS"],
+            description="Eliminar todos los registros")
 async def delete(response: Response):
     try:
         cur, conn = connect()
