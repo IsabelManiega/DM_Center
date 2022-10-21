@@ -65,16 +65,16 @@ async def show():
 #     return item
 
 # # Actualizar un dato del listado: PUT
-# @app.put("/putData/{id}", status_code=status.HTTP_200_OK, tags=["Users"],
-#          description="Actualizar un usuario")
+# @app.put("/putData/{numero_empleado}", status_code=status.HTTP_200_OK, tags=["Users"],
+#          description="Actualizar empleado")
 # async def update(id: int, item: User, response: Response):
 #     for i in range(0,len(database)):
-#         if database[i]["id"] == id:
+#         if database[i]["numero_empleado"] == numero_empleado:
 #             database[i] = item.dict()
 #             response.status_code = status.HTTP_200_OK
 #             return item
 #     response.status_code = status.HTTP_404_NOT_FOUND
-#     return {"id": id, "msg":"User Not Found"}
+#     return {"id": numero_empleado, "msg":"Empleado Not Found"}
 
 # Eliminar un dato: Delete
 @app.delete("/deleteData/{numero_empleado}", tags=["Empleados"],
