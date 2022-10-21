@@ -47,7 +47,7 @@ async def show():
         
 
 # Mostrar un dato listado: GET
-@app.get("/getData/{numero_empleado}", status_code=status.HTTP_200_OK, tags=["Empleado"],
+@app.get("/getData/{numero_empleado}", status_code=status.HTTP_200_OK, tags=["Empleados"],
          description="Mostrar un empleado")
 async def showOne(numero_empleado: int, response: Response):
     empleados = db.Empleados.find({}) 
