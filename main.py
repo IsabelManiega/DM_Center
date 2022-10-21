@@ -53,9 +53,17 @@ async def showOne(numero_empleado: int, response: Response):
     empleados = db.Empleados.find({}) 
     for empleado in empleados:
         if empleado["numero_empleado"] == numero_empleado:
-            idMongo = empleado["_Id"]
+            idMongo = empleado["_id"]
+            dict_aux = {
+                "numero_empleado": empleado["numero_empleado"],
+                "nombre": empleado["nombre"],
+                "edad": empleado["edad"],
+                "cargo": empleado["cargo"],
+                "departamento": empleado["departamento"],
+                "salario": empleado["salario"]
+            }
             response.status_code = status.HTTP_200_OK
-            return empleado
+            return dict_aux
     response.status_code = status.HTTP_404_NOT_FOUND
     return {"numero_empleado": numero_empleado, "msg":"Empleado Not Found"}
 
