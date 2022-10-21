@@ -1,10 +1,11 @@
 # Crear una Api rest
+import psycopg2
 from fastapi import FastAPI, status, Response
 from models import User
 from connection import connect
 
 # Funciones
-def mostrar_modificado(tabla, column, valor, response):
+def mostrar(tabla, column, valor, response):
         # Conexión a base de datos PostgreSQL
         cur, conn = connect()
         rows = []
