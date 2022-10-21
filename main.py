@@ -46,23 +46,23 @@ async def show():
     return lista_empleados
         
 
-# Mostrar un dato listado: GET
-@app.get("/getData/{item_id}", status_code=status.HTTP_200_OK, tags=["Users"],
-         description="Mostrar un usuario")
-async def showOne(id: int, response: Response):
-    for i in range(0,len(database)):
-        if database[i]["id"] == id:
-            response.status_code = status.HTTP_200_OK
-            return database[i]
-    response.status_code = status.HTTP_404_NOT_FOUND
-    return {"id": id, "msg":"User Not Found"}
+# # Mostrar un dato listado: GET
+# @app.get("/getData/{item_id}", status_code=status.HTTP_200_OK, tags=["Users"],
+#          description="Mostrar un usuario")
+# async def showOne(id: int, response: Response):
+#     for i in range(0,len(database)):
+#         if database[i]["id"] == id:
+#             response.status_code = status.HTTP_200_OK
+#             return database[i]
+#     response.status_code = status.HTTP_404_NOT_FOUND
+#     return {"id": id, "msg":"User Not Found"}
 
-#  Insertar un dato en es listado: POST
-@app.post("/postData/", status_code=status.HTTP_201_CREATED, tags=["Users"],
-          description="Insertar un usuario")
-async def insert(item: User):
-    database.append(item.dict())
-    return item
+# #  Insertar un dato en es listado: POST
+# @app.post("/postData/", status_code=status.HTTP_201_CREATED, tags=["Users"],
+#           description="Insertar un usuario")
+# async def insert(item: User):
+#     database.append(item.dict())
+#     return item
 
 
 
@@ -97,10 +97,10 @@ async def deleteOne(numero_empleado: int, response: Response):
     response.status_code = status.HTTP_404_NOT_FOUND
     return {"numero_empleado": numero_empleado, "msg":"Empleado Not Found"}
 
-@app.delete("/deleteData/", tags=["Users"],
-            description="Eliminar todos usuario")
+# @app.delete("/deleteData/", tags=["Users"],
+#             description="Eliminar todos usuario")
             
-async def delete(response: Response):
-    database.clear()
-    response.status_code = status.HTTP_200_OK
-    return {"msg": []}
+# async def delete(response: Response):
+#     database.clear()
+#     response.status_code = status.HTTP_200_OK
+#     return {"msg": []}
