@@ -93,6 +93,7 @@ async def deleteOne(numero_empleado: int, response: Response):
 
 @app.delete("/deleteData/", tags=["Users"],
             description="Eliminar todos usuario")
+            
 async def delete(response: Response):
     database.clear()
     response.status_code = status.HTTP_200_OK
