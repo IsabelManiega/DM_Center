@@ -120,9 +120,10 @@ async def delete(response: Response):
     try:
         cur, conn = connect()
         cur.execute("DELETE FROM notas;")
-        conn.commit
+        conn.commit()
+        print(f'Se ha elimindo los datos correctamente. registros borrados {cur.rowcount}')
     except psycopg2.Error as e:
-        conn.rollback
+        conn.rollback()
         return "Error al borrar la tablas: %s" % str(e)
         
 
