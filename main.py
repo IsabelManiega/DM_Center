@@ -50,7 +50,10 @@ async def show():
 @app.get("/getData/{numero_empleado}", status_code=status.HTTP_200_OK, tags=["Empleados"],
          description="Mostrar un empleado")
 async def showOne(numero_empleado: int, response: Response):
-    empleados = db.Empleados.find({}) 
+    empleados = db.Empleados.find({})
+    # test= list(empleados)
+    # print(test[0])
+    # print(type(test[0]))
     for empleado in empleados:
         if empleado["numero_empleado"] == numero_empleado:
             idMongo = empleado["_id"]
