@@ -4,7 +4,7 @@ from models import User
 from connection import connect
 
 # Funciones
-def mostrar(tabla, column, valor, response):
+def mostrar_modificado(tabla, column, valor, response):
         # Conexión a base de datos PostgreSQL
         cur, conn = connect()
         rows = []
@@ -112,8 +112,13 @@ async def deleteOne(id: int, response: Response):
     response.status_code = status.HTTP_404_NOT_FOUND
     return {"id": id, "msg":"User Not Found"}
 
+<<<<<<< HEAD
 @app.delete("/deleteData/", tags=["TERMINADOS"],
             description="Eliminar todos los registros")
+=======
+@app.delete("/deleteData/", tags=["PENDIENTESssssss"],
+            description="Eliminar todos usuario")
+>>>>>>> 68048da2a9c67d204672d0a3b4ddbc561f542413
 async def delete(response: Response):
     try:
         cur, conn = connect()
