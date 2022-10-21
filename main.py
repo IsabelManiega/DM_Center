@@ -18,9 +18,7 @@ tags_metadata=[
 
 app = FastAPI(title="Base de datos Empleados Fei",
               openapi_tags=tags_metadata,
-              nombres = "Belen Aristizabal, Jessenia Gutierrez, Rosana Longares, "
-              nombres += "Adrián Mencias, María Mendoza, Luis Vallejo"
-              contact={"name": nombres},
+              contact={"name": "Belen Aristizabal, Rosana Longares, Adrián Mencias, María Mendoza, Luis Vallejo"},
               openapi_url="/api/v0.1/openapi.json")
 
 
@@ -49,15 +47,17 @@ async def show():
         
 
 # Mostrar un dato listado: GET
-@app.get("/getData/{item_id}", status_code=status.HTTP_200_OK, tags=["Users"],
-         description="Mostrar un usuario")
-async def showOne(id: int, response: Response):
-    for i in range(0,len(database)):
-        if database[i]["id"] == id:
+@app.get("/getData/{numero_empleado}", status_code=status.HTTP_200_OK, tags=["Empleado"],
+         description="Mostrar un empleado")
+async def showOne(numero_empleado: int, response: Response):
+    empleados = db.Empleados.find({}) 
+    for empleado in empleados:
+        if empleado["numero_empleado"] == numero_empleado:
+            idMongo = empleado["_Id"]
             response.status_code = status.HTTP_200_OK
-            return database[i]
+            return empleado
     response.status_code = status.HTTP_404_NOT_FOUND
-    return {"id": id, "msg":"User Not Found"}
+    return {"numero_empleado": numero_empleado, "msg":"Empleado Not Found"}
 
 #  Insertar un dato en es listado: POST
 @app.post("/postData/", status_code=status.HTTP_201_CREATED, tags=["Users"],
