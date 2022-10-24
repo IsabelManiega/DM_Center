@@ -102,16 +102,28 @@ async def update(id: int, item: User, response: Response):
     return {"id": id, "msg":"User Not Found"}
 
 # Eliminar un dato: Delete
-@app.delete("/deleteData/{id}", tags=["PENDIENTES"],
-            description="Eliminar un registro")
+@app.delete("/deleteData/{item_id}", status_code=status.HTTP_200_OK, tags=["TERMINADOS"],
+            description="Eliminar un usuario")
 async def deleteOne(id: int, response: Response):
-    for value in database:
-        if value["id"] == id:
-            database.remove(value)
-            response.status_code = status.HTTP_204_NO_CONTENT
-            return {"item_id": id, "msg": "Eliminado"}
-    response.status_code = status.HTTP_404_NOT_FOUND
-    return {"id": id, "msg":"User Not Found"}
+     # Conexión a base de datos PostgreSQL
+        cur, conn = connect()
+
+        # Generamos y ejecutamos la query
+        try:
+            query = f"DELETE FROM notas WHERE Id = {id};"
+            cur.execute(query)
+            conn.commit()
+        except psycopg2.Error as e:
+            response.status_code=status.HTTP_404_NOT_FOUND
+            conn.rollback()
+            print("Error Eliminando registro: %s" % str(e))
+
+        # Actualizamos y cerramos la base de datos
+        cur.close()
+        conn.close()
+
+        response.status_code = status.HTTP_200_OK
+        return {"msg": ["Se ha elimindo el dato correctamente"]}
 
 @app.delete("/deleteData/", tags=["TERMINADOS"],
             description="Eliminar todos los registros")
