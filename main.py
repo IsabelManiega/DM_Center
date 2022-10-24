@@ -76,7 +76,7 @@ async def showOne(numero_empleado: int, response: Response):
 @app.post("/postData/", status_code=status.HTTP_201_CREATED, tags=["Empleados"],
           description="Insertar un Empleado")
 async def insert(item: Empleado):
-    db.Empleados.insert_one(item)
+    db.Empleados.insert_one(item.dict())
     #database.append(item.dict())
     return item
 
