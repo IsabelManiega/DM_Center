@@ -109,10 +109,10 @@ async def deleteOne(numero_empleado: int, response: Response):
     response.status_code = status.HTTP_404_NOT_FOUND
     return {"numero_empleado": numero_empleado, "msg":"Empleado Not Found"}
 
-# @app.delete("/deleteData/", tags=["Users"],
-#             description="Eliminar todos usuario")
+@app.delete("/deleteData/", tags=["Empleados"],
+            description="Eliminar todos los empleados")
             
-# async def delete(response: Response):
-#     database.clear()
-#     response.status_code = status.HTTP_200_OK
-#     return {"msg": []}
+async def delete(response: Response):
+    db.Empleados.deleteMany({})
+    response.status_code = status.HTTP_200_OK
+    return {"msg": []}
