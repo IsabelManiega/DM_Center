@@ -31,19 +31,6 @@ async def info():
 
 
 
-@app.get("/insertExemple/", status_code=status.HTTP_200_OK, tags=["Empleados"],
-         description="Crea usuarios para testear")
-async def show(response: Response):
-    dict_list = [
-        {"numero_empleado": 1,"nombre": "Pedro López", "edad": 25, "cargo": "Gerente","departamento":"IT", "salario": 2000}, 
-        {"numero_empleado": 2,"nombre": "Julia García", "edad": 22, "cargo": "CEO","departamento":"Administración", "salario": 5500},
-        {"numero_empleado": 3,"nombre": "Amparo Mayoral", "edad": 28, "cargo": "Junior","departamento":"Programación", "salario": 1500},
-        {"numero_empleado": 4,"nombre": "Juan Martinez", "edad": 30, "cargo": "Senior","departamento":"Arte", "salario": 2300}
-    ]
-    db.notas.insert_many(dict_list)
-    response.status_code = status.HTTP_200_OK
-    return "Ejemplos insertados"
-
 # Mostrar el listado: GET
 @app.get("/getData/", status_code=status.HTTP_200_OK, tags=["Empleados"],
          description="Muestra todos los empleados")
@@ -83,6 +70,20 @@ async def showOne(numero_empleado: int, response: Response):
             return dict_aux
     response.status_code = status.HTTP_404_NOT_FOUND
     return {"numero_empleado": numero_empleado, "msg":"Empleado Not Found"}
+
+# Insertar ejemplos: many
+@app.post("/insertExemple/", status_code=status.HTTP_200_OK, tags=["Empleados"],
+         description="Crea usuarios para testear")
+async def show(response: Response):
+    dict_list = [
+        {"numero_empleado": 1,"nombre": "Pedro López", "edad": 25, "cargo": "Gerente","departamento":"IT", "salario": 2000}, 
+        {"numero_empleado": 2,"nombre": "Julia García", "edad": 22, "cargo": "CEO","departamento":"Administración", "salario": 5500},
+        {"numero_empleado": 3,"nombre": "Amparo Mayoral", "edad": 28, "cargo": "Junior","departamento":"Programación", "salario": 1500},
+        {"numero_empleado": 4,"nombre": "Juan Martinez", "edad": 30, "cargo": "Senior","departamento":"Arte", "salario": 2300}
+    ]
+    db.notas.insert_many(dict_list)
+    response.status_code = status.HTTP_200_OK
+    return "Ejemplos insertados"
 
 #  Insertar un dato en es listado: POST
 @app.post("/postData/", status_code=status.HTTP_201_CREATED, tags=["Empleados"],
