@@ -29,6 +29,21 @@ app = FastAPI(title="Base de datos Empleados Fei",
 async def info():
     return {"msg": "Bienvenido a nuestra Api Rest"}
 
+
+
+@app.get("/insertExemple/", status_code=status.HTTP_200_OK, tags=["Empleados"],
+         description="Crea usuarios para testear")
+async def show(response: Response):
+    dict_list = [
+        {"numero_empleado": 1,"nombre": "Pedro López", "edad": 25, "cargo": "Gerente","departamento":"IT", "salario": 2000}, 
+        {"numero_empleado": 2,"nombre": "Julia García", "edad": 22, "cargo": "CEO","departamento":"Administración", "salario": 5500},
+        {"numero_empleado": 3,"nombre": "Amparo Mayoral", "edad": 28, "cargo": "Junior","departamento":"Programación", "salario": 1500},
+        {"numero_empleado": 4,"nombre": "Juan Martinez", "edad": 30, "cargo": "Senior","departamento":"Arte", "salario": 2300}
+    ]
+    db.notas.insert_many(dict_list)
+    response.status_code = status.HTTP_200_OK
+    return "Ejemplos insertados"
+
 # Mostrar el listado: GET
 @app.get("/getData/", status_code=status.HTTP_200_OK, tags=["Empleados"],
          description="Muestra todos los empleados")
@@ -53,9 +68,6 @@ async def show():
          description="Mostrar un empleado")
 async def showOne(numero_empleado: int, response: Response):
     empleados = db.Empleados.find({})
-    # test= list(empleados)
-    # print(test[0])
-    # print(type(test[0]))
     for empleado in empleados:
         if empleado["numero_empleado"] == numero_empleado:
             idMongo = empleado["_id"]
@@ -76,8 +88,7 @@ async def showOne(numero_empleado: int, response: Response):
 @app.post("/postData/", status_code=status.HTTP_201_CREATED, tags=["Empleados"],
           description="Insertar un Empleado")
 async def insert(item: Empleado):
-    db.Empleados.insert_one(item.dict())
-    #database.append(item.dict())
+    db.Empleados.insert_one(item)
     return item
 
 # Actualizar un dato del listado: PUT
@@ -109,9 +120,10 @@ async def deleteOne(numero_empleado: int, response: Response):
     response.status_code = status.HTTP_404_NOT_FOUND
     return {"numero_empleado": numero_empleado, "msg":"Empleado Not Found"}
 
+#Eliminar todos los datos: Delete
 @app.delete("/deleteData/", tags=["Empleados"],
             description="Eliminar todos los empleados")
-            
+ 
 async def delete(response: Response):
     db.Empleados.delete_many({})
     response.status_code = status.HTTP_200_OK
