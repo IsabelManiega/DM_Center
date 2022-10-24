@@ -113,6 +113,6 @@ async def deleteOne(numero_empleado: int, response: Response):
             description="Eliminar todos los empleados")
             
 async def delete(response: Response):
-    db.Empleados.deleteMany({})
+    db.Empleados.delete_many({})
     response.status_code = status.HTTP_200_OK
     return {"msg": []}
