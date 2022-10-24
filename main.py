@@ -74,7 +74,7 @@ async def showOne(numero_empleado: int, response: Response):
 # Insertar ejemplos: many
 @app.post("/insertExemple/", status_code=status.HTTP_200_OK, tags=["Empleados"],
          description="Crea usuarios para testear")
-async def show(response: Response):
+async def insertManyEx(response: Response):
     dict_list = [
         {"numero_empleado": 1,"nombre": "Pedro López", "edad": 25, "cargo": "Gerente","departamento":"IT", "salario": 2000}, 
         {"numero_empleado": 2,"nombre": "Julia García", "edad": 22, "cargo": "CEO","departamento":"Administración", "salario": 5500},
