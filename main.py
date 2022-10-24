@@ -81,7 +81,7 @@ async def show(response: Response):
         {"numero_empleado": 3,"nombre": "Amparo Mayoral", "edad": 28, "cargo": "Junior","departamento":"Programación", "salario": 1500},
         {"numero_empleado": 4,"nombre": "Juan Martinez", "edad": 30, "cargo": "Senior","departamento":"Arte", "salario": 2300}
     ]
-    db.notas.insert_many(dict_list)
+    db.Empleados.insert_many(dict_list)
     response.status_code = status.HTTP_200_OK
     return "Ejemplos insertados"
 
