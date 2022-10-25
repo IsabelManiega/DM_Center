@@ -89,7 +89,7 @@ async def insertManyEx(response: Response):
 @app.post("/postData/", status_code=status.HTTP_201_CREATED, tags=["Empleados"],
           description="Insertar un Empleado")
 async def insert(item: Empleado):
-    db.Empleados.insert_one(item)
+    db.Empleados.insert_one(item.dict())
     return item
 
 # Actualizar un dato del listado: PUT
