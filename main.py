@@ -3,7 +3,12 @@ import psycopg2
 from fastapi import FastAPI, status, Response
 from models import User
 from connection import connect
-from mostrardatostabla import mostrar
+# from mostrardatostabla import mostrar
+from CRUD import crud
+
+
+crud.createDatabase()
+crud.createTablaNotas()
 
 
 tags_metadata=[
@@ -79,7 +84,7 @@ async def show():
          description="Mostrar los datos de un registro")
 async def showOne(id_buscar: int, response: Response):
     
-    return mostrar("notas", "id", id_buscar, response)
+    return crud.mostrar("notas", "id", id_buscar, response)
 
 #  Insertar un dato en es listado: POST
 @app.post("/postData/", status_code=status.HTTP_201_CREATED, tags=["PENDIENTES"],
