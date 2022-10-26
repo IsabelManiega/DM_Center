@@ -43,7 +43,28 @@ Elimina la información relativa a un usuario en la aplicación.
 
 Elimina la información relativa a todos usuarios en la aplicación.
 
-3. Estructura del proyecto
+
+3. Ejecutar Aplicación
+----------------------
+
+Crear entorno virtual en la carpeta que queramos:
+
+py -m venv env
+
+Activar entorno virtual:
+
+env\Scripts\activate
+
+Instalar las librerias de requirements.txt:
+
+pip install -r requirements.txt
+
+Ejecutar fastapi:
+
+uvicorn main:app --reload
+
+
+4. Estructura del proyecto
 --------------------------
 
 El proyecto consta de:
