@@ -7,10 +7,10 @@ import settings
 from models import User
 from connection import connect
 
-# Conexión a base de datos PostgreSQL
-cur, conn = connect()
 
-def createTablaNotas(cur):
+def createTablaNotas():
+    # Conexión a base de datos PostgreSQL
+    cur, conn = connect()
     try:
         query = "CREATE TABLE notas"
         query += "(Id SERIAL PRIMARY KEY, "
@@ -20,9 +20,8 @@ def createTablaNotas(cur):
         query += "Fecha date);"
         cur.execute(query)
     except psycopg2.Error as e:
-        print("Error crear la tabla Notas: %s" % str(e))
+        return str(e)
 
-createTablaNotas(cur)
-conn.commit()
-cur.close()
-conn.close()
+    conn.commit()
+    cur.close()
+    conn.close()

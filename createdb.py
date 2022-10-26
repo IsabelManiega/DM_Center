@@ -3,7 +3,7 @@ import psycopg2
 from psycopg2 import sql 
 from psycopg2.extensions import ISOLATION_LEVEL_AUTOCOMMIT
 import settings
-
+from connection import connect
 
 def createDatabase():
     conn = psycopg2.connect(user=settings.USER,
@@ -18,9 +18,9 @@ def createDatabase():
     try:
         cur.execute(sql.SQL("CREATE DATABASE {};").format(sql.Identifier("test")))
     except psycopg2.Error as e:
-        print("Error al crear la base de datos: %s" % str(e))
+        return str(e)
 
     cur.close()
     conn.close()
 
-createDatabase()
+
