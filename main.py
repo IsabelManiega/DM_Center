@@ -80,16 +80,16 @@ async def insert(item: Empleado):
 @app.put("/putData/{numero_empleado}", tags=["Empleados"],
          description="Actualizar empleado")
 async def update(item: Empleado, numero_empleado: int, response: Response):
-    for dato in db.Empleados.find({}):
-        if dato["numero_empleado"] == numero_empleado:
-            idMongo=dato["_id"]    
-            dict=item.dict()
-            for k,v in dict.items():
-                db.Empleados.update_one({"_id":idMongo},{"$set":{k:v}})
-            response.status_code = status.HTTP_200_OK
-            return item
-    response.status_code = status.HTTP_404_NOT_FOUND
-    return {"id": numero_empleado, "msg":"Empleado Not Found"}
+    try:
+        empleado = db.Empleados.find_one({"numero_empleado": numero_empleado})
+        dict=item.dict()
+        for k,v in dict.items():
+            db.Empleados.update_one({"_id":empleado["_id"]},{"$set":{k:v}})
+        response.status_code = status.HTTP_200_OK
+        return item
+    except:
+        response.status_code = status.HTTP_404_NOT_FOUND
+        return {"id": numero_empleado, "msg":"Empleado Not Found"}
 
 # Eliminar un dato: Delete
 @app.delete("/deleteData/{numero_empleado}", tags=["Empleados"],
