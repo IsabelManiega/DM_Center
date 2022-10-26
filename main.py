@@ -97,15 +97,22 @@ async def insert(item: User):
 @app.put("/putData/{id}", status_code=status.HTTP_200_OK, tags=["PENDIENTES"],
          description="Actualizar un registro")
 async def update(id: int, item: User, response: Response):
-    print('esto lo tiene que quitar')
-    for i in range(0,len(database)):
-        if database[i]["id"] == id:
-            database[i] = item.dict()
-            response.status_code = status.HTTP_200_OK
-            return item
-    response.status_code = status.HTTP_404_NOT_FOUND
-    return {"id": id, "msg":"User Not Found"}
+
+    cur, conn = connect()
+    try:
+        cur.execute(f"UPDATE notas SET Nombre='{item.Nombre}'  WHERE Id={id};")
+    except psycopg2.Error as e:
+        print("Error actualizar registro: %s" % str(e))
+        conn.rollback()
+        print(f'Se han añadido los datos correctamente. registros borrados {cur.rowcount}')
+        
+    conn.commit()   
+    cur.close()
+    conn.close()
+    response.status_code = status.HTTP_200_OK
+    return {"msg": ["Se han actualizado los datos correctamente"]}
     
+
 # Eliminar un dato: Delete
 @app.delete("/deleteData/{item_id}", status_code=status.HTTP_200_OK, tags=["TERMINADOS"],
             description="Eliminar un usuario")
