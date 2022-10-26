@@ -65,6 +65,7 @@ async def show():
             datos["Nota"]=row[3]
             datos["Fecha"]=row[4]
             datos_return.append(datos)
+            datos={}
     except psycopg2.Error as e:
          return {f"msg":"Error al insertar registros: %s" % str(e) }
     finally:
