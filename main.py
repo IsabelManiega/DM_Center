@@ -38,15 +38,8 @@ async def show():
     empleados = db.Empleados.find({})
     lista_empleados = []
     for fila in empleados:
-        dict_aux = {
-            "numero_empleado": fila["numero_empleado"],
-            "nombre": fila["nombre"],
-            "edad": fila["edad"],
-            "cargo": fila["cargo"],
-            "departamento": fila["departamento"],
-            "salario": fila["salario"]
-        }
-        lista_empleados.append(dict_aux)
+        del fila["_id"]
+        lista_empleados.append(fila)
     return lista_empleados
         
 
