@@ -11,35 +11,35 @@ Es una aplicación creada con Python 3.8.10 para la gestión de los datos median
 
 Creados distintos métodos para la gestión de los datos:
 
-* [GET] http://localhost:8000/docs#/TEST/info__get
+* [GET] http://localhost:8000/
 
 Muestra mensaje de bienvenida.
 
-* [GET] http://localhost:8000/docs#/Empleados/show_getData__get
+* [GET] http://localhost:8000/getData/
 
 Muestra la información relativa a todos los usuarios registrados en la aplicación.
 
-* [GET] http://localhost:8000/docs#/Empleados/showOne_getData__numero_empleado__get
+* [GET] http://127.0.0.1:8000/getData/3
 
 Muestra la información relativa a un usuario registrados en la aplicación.
 
-* [POST] http://localhost:8000/docs#/Empleados/insertManyEx_insertExemple__post
+* [POST] http://127.0.0.1:8000/insertExemple/
 
 Inserta la información relativa a varios usuarios como modo de ejemplo en la aplicación.
 
-* [POST] http://localhost:8000/docs#/Empleados/insert_postData__post
+* [POST] http://127.0.0.1:8000/postData/
 
 Inserta la información relativa a un usuario en la aplicación.
 
-* [PUT] http://localhost:8000/docs#/Empleados/update_putData__numero_empleado__put
+* [PUT] http://127.0.0.1:8000/putData/1
 
 Actualizar la información relativa a un usuario en la aplicación.
 
-* [DELETE] http://localhost:8000/docs#/Empleados/deleteOne_deleteData__numero_empleado__delete
+* [DELETE] http://127.0.0.1:8000/deleteData/1
 
 Elimina la información relativa a un usuario en la aplicación.
 
-* [DELETE] http://localhost:8000/docs#/Empleados/delete_deleteData__delete
+* [DELETE] http://127.0.0.1:8000/deleteData/
 
 Elimina la información relativa a todos usuarios en la aplicación.
 
