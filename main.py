@@ -53,6 +53,7 @@ async def info():
          description="Mostrar todos los registros")
 async def show():
     try:
+        datos_return=[]
         datos={}
         cur, conn = connect()
         cur.execute("SELECT * FROM notas;")
@@ -63,12 +64,13 @@ async def show():
             datos["Edad"]=row[2]
             datos["Nota"]=row[3]
             datos["Fecha"]=row[4]
+            datos_return.append(datos)
     except psycopg2.Error as e:
          return {f"msg":"Error al insertar registros: %s" % str(e) }
     finally:
         cur.close()
         conn.close()
-        return datos
+        return datos_return
 
 
 # Mostrar un dato listado: GET ID
