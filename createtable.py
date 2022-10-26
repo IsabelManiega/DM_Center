@@ -25,3 +25,4 @@ def createTablaNotas(cur):
 createTablaNotas(cur)
 conn.commit()
 cur.close()
+conn.close()
