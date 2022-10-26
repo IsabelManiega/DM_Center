@@ -24,7 +24,25 @@ app = FastAPI(title="BBDD Test",
               contact={"name": nombres},
               openapi_url="/api/v0.1/openapi.json")
 
-
+@app.post("/insertar/", status_code=status.HTTP_201_CREATED, tags=["Datos de prueba"],
+          description="Insertar datos de prueba")
+async def Insertar_datos_prueba():
+    try:
+        cur, conn = connect()
+        cur.execute("INSERT INTO notas VALUES(default, %s, %s, %s, %s);", ('Ana',20,7.5,'2022-10-20'))
+        cur.execute("INSERT INTO notas VALUES(default, %s, %s, %s, %s);", ('Juan',21,8.5,'2022-10-21'))
+        cur.execute("INSERT INTO notas VALUES(default, %s, %s, %s, %s);", ('Luisa',22,9.5,'2022-10-22'))
+        cur.execute("INSERT INTO notas VALUES(default, %s, %s, %s, %s);", ('Pedro',23,3.5,'2022-10-23'))
+        cur.execute("INSERT INTO notas VALUES(default, %s, %s, %s, %s);", ('Laura',24,10.0,'2022-10-24'))
+        conn.commit()
+    except psycopg2.Error as e:
+        conn.rollback()
+        #return ("Error insertar registros: %s" % str(e))
+        return {f"msg":"Error al insertar registros: %s" % str(e) }
+    finally:
+        cur.close()
+        conn.close()
+        return ("insertados 5 registros en la tabla notas")
 
 @app.get("/", tags=["TEST"], description="Mostrar la información de la WEB")
 async def info():
@@ -46,7 +64,7 @@ async def show():
             datos["Nota"]=row[3]
             datos["Fecha"]=row[4]
     except psycopg2.Error as e:
-        return "Error mostrar registros: %s" % str(e)
+         return {f"msg":"Error al insertar registros: %s" % str(e) }
     finally:
         cur.close()
         conn.close()
