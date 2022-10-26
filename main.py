@@ -61,12 +61,16 @@ async def info():
          description="Mostrar todos los registros")
 async def show():
     try:
-        datos=[]
+        datos={}
         cur, conn = connect()
         cur.execute("SELECT * FROM notas;")
         rows = cur.fetchall()
         for row in rows:
-            datos.append(row)
+            datos["Id"]=row[0]
+            datos["Nombre"]=row[1]
+            datos["Edad"]=row[2]
+            datos["Nota"]=row[3]
+            datos["Fecha"]=row[4]
     except psycopg2.Error as e:
         return "Error mostrar registros: %s" % str(e)
     finally:
@@ -93,6 +97,7 @@ async def insert(item: User):
 @app.put("/putData/{id}", status_code=status.HTTP_200_OK, tags=["PENDIENTES"],
          description="Actualizar un registro")
 async def update(id: int, item: User, response: Response):
+
     cur, conn = connect()
     try:
         cur.execute(f"UPDATE notas SET Nombre='{item.Nombre}'  WHERE Id={id};")
@@ -151,7 +156,5 @@ async def delete(response: Response):
     conn.close()
     response.status_code = status.HTTP_200_OK
     return {"msg": ["Se ha elimindo los datos correctamente"]}
-
-
 
 
