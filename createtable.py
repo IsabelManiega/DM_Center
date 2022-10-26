@@ -23,6 +23,6 @@ def createTablaNotas(cur):
         print("Error crear la tabla Notas: %s" % str(e))
 
 createTablaNotas(cur)
-
+conn.commit()
 cur.close()
 conn.close()
