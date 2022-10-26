@@ -54,22 +54,13 @@ async def show():
 @app.get("/getData/{numero_empleado}", status_code=status.HTTP_200_OK, tags=["Empleados"],
          description="Mostrar un empleado")
 async def showOne(numero_empleado: int, response: Response):
-    empleados = db.Empleados.find({})
-    for empleado in empleados:
-        if empleado["numero_empleado"] == numero_empleado:
-            idMongo = empleado["_id"]
-            dict_aux = {
-                "numero_empleado": empleado["numero_empleado"],
-                "nombre": empleado["nombre"],
-                "edad": empleado["edad"],
-                "cargo": empleado["cargo"],
-                "departamento": empleado["departamento"],
-                "salario": empleado["salario"]
-            }
-            response.status_code = status.HTTP_200_OK
-            return dict_aux
-    response.status_code = status.HTTP_404_NOT_FOUND
-    return {"numero_empleado": numero_empleado, "msg":"Empleado Not Found"}
+    try:
+        empleado = db.Empleados.find_one({"numero_empleado": numero_empleado})
+        empleado["_id"] = str(empleado["_id"])
+        return empleado
+    except:
+        response.status_code = status.HTTP_404_NOT_FOUND
+        return {"numero_empleado": numero_empleado, "msg":"Empleado Not Found"}
 
 # Insertar ejemplos: many
 @app.post("/insertExemple/", status_code=status.HTTP_200_OK, tags=["Empleados"],
