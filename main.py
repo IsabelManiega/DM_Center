@@ -7,8 +7,7 @@ from connection import connect
 from CRUD import crud
 import quandl
 import yfinance as yf
-import dask.dataframe as dd
-
+import dask.dataframe as dd 
 
 crud.createDatabase()
 crud.createTablaNotas()
