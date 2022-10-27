@@ -7,9 +7,6 @@ from connection import connect
 from CRUD import crud
 import quandl
 import yfinance as yf
-from dash import dcc
-from dash import html
-from dash.dependencies import Input, Output
 import dask.dataframe as dd
 
 
