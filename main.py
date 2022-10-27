@@ -5,6 +5,8 @@ from models import User
 from connection import connect
 # from mostrardatostabla import mostrar
 from CRUD import crud
+import quandl
+import yfinance as yf
 
 
 crud.createDatabase()
