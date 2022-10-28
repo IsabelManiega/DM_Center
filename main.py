@@ -284,7 +284,28 @@ async def get_describe():
     conn.close()
 
 # DELETE (id): Belen 
-@app.delete("/deleteData/{item_id}", status_code=status.HTTP_200_OK, tags=["FINANZAS"],
-            description="DELETE/ID: Elimina un dato concreto de la base de datos.")
-async def delete_Id(id: int, response: Response):
-    pass
+@app.delete("/deleteamazon/{date}", status_code=status.HTTP_200_OK, tags=["FINANZAS"],
+            description="DELETE/ID: Elimina una fecha concreta de la base de datos.")
+async def delete_date(date: str, response: Response):
+    # Conexión a base de datos PostgreSQL
+    cur, conn = connect()
+    # Generamos y ejecutamos la query
+    try:
+        date = datetime.datetime.strptime(date, '%Y-%m-%d' )
+        query = f"DELETE FROM amazon WHERE Date = '{date}';"
+        cur.execute(query)
+        conn.commit()
+    except psycopg2.Error as e:
+        response.status_code=status.HTTP_404_NOT_FOUND
+        cur.close()
+        conn.close()
+        return "Error Eliminando registro: %s" % str(e)
+
+        # Actualizamos y cerramos la base de datos
+    cur.close()
+    conn.close()
+
+    response.status_code = status.HTTP_200_OK
+    return {"msg": ["Se ha elimindo la fecha correctamente"]}
+    
+    
