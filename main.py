@@ -11,6 +11,7 @@ import dask.dataframe as dd
 
 crud.createDatabase()
 crud.createTablaNotas()
+crud.createTablaAmazon()
 
 
 tags_metadata=[
@@ -22,6 +23,10 @@ tags_metadata=[
         "name": "Test",
         "description": "Muestra la gestión de la tabla Notas",
     },
+    {
+        "name": "FINANZAS",
+        "description": "Muestra datos financieros de Amazon"
+    }
 ]
 nombres = "Jerónimo Guitierrez, Francisco Javier Florido, Cristina Lendinez, "
 nombres += "Javier López, Etty Guerra, Carlos Javier Cuenca"
@@ -162,3 +167,12 @@ async def delete(response: Response):
     conn.close()
     response.status_code = status.HTTP_200_OK
     return {"msg": ["Se han eliminado los datos correctamente"]}
+
+###################################FINANZAS#######################################
+
+# @app.post("/postData/", status_code=status.HTTP_201_CREATED, tags=["Finanzas"],
+#           description="Insertar datos de amazon en la base de datos")
+# async def post_amzn():
+#     try:
+#         data = quandl.get("WIKI/AMZN", start_date="2015-01-01", end_date="2018-12-31")
+
