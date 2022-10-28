@@ -24,6 +24,14 @@ tags_metadata=[
         "description": "Muestra la gestión de la tabla Notas",
     },
     {
+        "name": "PENDIENTES",
+        "description":" ",
+    },
+    {
+        "name": "TERMINADOS",
+        "description":" ",
+    },
+    {
         "name": "FINANZAS",
         "description": "Muestra datos financieros de Amazon"
     }
@@ -179,7 +187,7 @@ async def delete(response: Response):
     Belen --> DELETE (id) 
 """
 
-@app.get("/Finanzas/", tags=["FINANZAS"], description="Información de la WEB: XXXXXXXXX")
+@app.get("/Finanzas/", tags=["FINANZAS"], description="Información de la WEB: WIKI/AMZN")
 async def bienvenida():
     description = """ Bienvenido a nuestra Api Rest del Mercado Global:
     En la parte anterior añadir:
@@ -208,11 +216,6 @@ async def get_Fechas():
 async def post_quandl_yfinance():
     pass
 
-# POST filtrado: Adrian
-@app.post("/Filtro/", status_code=status.HTTP_201_CREATED, tags=["FINANZAS"],
-          description="POST: añadir el filtrado de un determinado dato.")
-async def post_filtrado():
-    pass
 
 # GET: Jessenia
 @app.get("/getData/", status_code=status.HTTP_200_OK, tags=["FINANZAS"],
