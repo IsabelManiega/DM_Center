@@ -29,7 +29,7 @@ tags_metadata=[
     }
 ]
 nombres = "Jerónimo Guitierrez, Francisco Javier Florido, Cristina Lendinez, "
-nombres += "Javier López, Etty Guerra, Carlos Javier Cuenca"
+nombres += "Javier López, Etty Guerra, Carlos Javier Cuenca, Jessenia Gutierrez Nagua, Adrian Mencias Del Olmo, Luis Vallejo Carretero, María Belen Aristizabal, Rosana Longares Herrero, María Mendoza"
 
 app = FastAPI(title="BBDD Test",
               openapi_tags=tags_metadata,
@@ -168,11 +168,86 @@ async def delete(response: Response):
     response.status_code = status.HTTP_200_OK
     return {"msg": ["Se han eliminado los datos correctamente"]}
 
-###################################FINANZAS#######################################
+    #__________________________ Actividad Suplementaria _______________________________
 
-# @app.post("/postData/", status_code=status.HTTP_201_CREATED, tags=["Finanzas"],
-#           description="Insertar datos de amazon en la base de datos")
-# async def post_amzn():
-#     try:
-#         data = quandl.get("WIKI/AMZN", start_date="2015-01-01", end_date="2018-12-31")
+""" 
+    Rosana --> GET/fechas
+    Luis --> POST quandl/yfinance
+    Adrian --> POST filtrado
+    Jessenia --> GET
+    Fernanda --> GET/describe
+    Belen --> DELETE (id) 
+"""
 
+@app.get("/Finanzas/", tags=["FINANZAS"], description="Información de la WEB: XXXXXXXXX")
+async def bienvenida():
+    description = """ Bienvenido a nuestra Api Rest del Mercado Global:
+    En la parte anterior añadir:
+        POST: añadir el filtrado de un determinado dato.
+    
+    Añadir al Backend una conexión a quandl/yfinance y realizar:
+        POST: realizar una petición por fecha a quandl/yfinance e insertar en base de datos.
+        GET: muestra los datos que hay en base de datos.
+        GET/Fechas: mostrar los datos por fechas concretas.
+        GET/describe: realizar una petición a la base de datos, crear un dataframe con dask y responder con el describe.
+        DELETE/ID: Elimina un dato concreto de la base de datos.
+    
+     """
+    return description
+    # return {"msg": "Bienvenido a nuestra Api Rest del Mercado Global"}
+
+# GET/fechas: Rosana
+@app.get("/getFechas/", status_code=status.HTTP_200_OK, tags=["FINANZAS"],
+         description="GET/Fechas: mostrar los datos por fechas concretas.")
+async def get_Fechas():
+    pass
+
+# POST quandl/yfinance: Luis
+@app.post("/insertar/", status_code=status.HTTP_201_CREATED, tags=["FINANZAS"],
+          description="POST: realizar una petición por fecha a quandl/yfinance e insertar en base de datos.")
+async def post_quandl_yfinance():
+    pass
+
+# POST filtrado: Adrian
+@app.post("/Filtro/", status_code=status.HTTP_201_CREATED, tags=["FINANZAS"],
+          description="POST: añadir el filtrado de un determinado dato.")
+async def post_filtrado():
+    pass
+
+# GET: Jessenia
+@app.get("/getData/", status_code=status.HTTP_200_OK, tags=["FINANZAS"],
+         description="GET: muestra los datos que hay en base de datos.")
+async def get_data():
+    pass
+
+# GET/describe/mostar: Fernanda
+@app.get("/getDescribe/", status_code=status.HTTP_200_OK, tags=["FINANZAS"],
+         description="GET/describe: realizar una petición a la base de datos, crear un dataframe con dask y responder con el describe.")
+async def get_describe():
+    
+    cur, conn = connect()
+     
+    BBDD = 'notas'
+    try:
+        pass
+    # Equivalent to:
+    # SELECT * FROM chapterFour.violations  #https://livebook.manning.com/book/data-science-at-scale-with-python-and-dask/chapter-4/84 
+    # df = dd.read_sql_table('BBDD', conn, npartitions=10, index_col='id') 
+    # cur.execute("SELECT * FROM %s ;" %('BBDD'))
+    # rows = cur.fetchall()
+    # df_dask = dd.read_csv("yellow_tripdata.csv", asume_missing=True)
+    # return df_dask.describe().compute()
+    
+    except psycopg2.Error as e:
+        print("Error al mostrar data frame: %s" %str(e))
+
+    conn.commit()
+
+    cur.close()
+    conn.close()
+
+# DELETE (id): Belen 
+@app.delete("/deleteData/{item_id}", status_code=status.HTTP_200_OK, tags=["FINANZAS"],
+            description="DELETE/ID: Elimina un dato concreto de la base de datos.")
+async def delete_Id(id: int, response: Response):
+    pass
