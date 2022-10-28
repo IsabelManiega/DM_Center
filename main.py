@@ -3,6 +3,10 @@ from fastapi import FastAPI, status, Response
 from models import Empleado
 from connection import connect
 
+import pandas as pd
+import yfinance as yf
+from CRUD import crud
+
 db = connect()
 
 tags_metadata=[
@@ -14,10 +18,17 @@ tags_metadata=[
         "name": "Empleados",
         "description": "Muestra los gestión de los empleados",
     },
+    {
+        "name": "Cotización Google",
+        "description": "Muestra los datos capturados de YFinance",
+    },
 ]
 nombres = "Belen Aristizabal, Jessenia Gutierrez, Rosana Longares, "
 nombres += "Adrián Mencias, María Mendoza, Luis Vallejo"
-app = FastAPI(title="Base de datos Empleados Fei",
+nombres += "Cristina Lendinez, Etty Guerra, Francisco Javier Florido"
+nombres += "Javier López, Jerónimo Guitierrez, Carlos Javier Cuenca"
+
+app = FastAPI(title="Base de datos Empleados Fei y Base de datos cotización Google YFinance",
               openapi_tags=tags_metadata,
               
               contact={"name": nombres},
@@ -112,3 +123,23 @@ async def delete(response: Response):
     db.Empleados.delete_many({})
     response.status_code = status.HTTP_200_OK
     return {"msg": []}
+
+
+#####################################################################################
+#                   GESTION DE BBDD DE COTIZACION DE GOOGLE                       
+#
+#####################################################################################
+# POST BBDD YFinance
+@app.post("/insertYFinance/", status_code=status.HTTP_200_OK, tags=["FINANZAS"],
+         description="Carga cotización Google de YFinance")
+async def post(response: Response):
+    
+    nombredb="DBGoogle"
+    coleccion="Yfinance"
+    num_registros= crud.insertDocument(nombredb, coleccion)
+    if num_registros != 0:
+        response.status_code = status.HTTP_200_OK
+        return "Tabla Creada y datos YFinance cargados"
+    else:
+        response.status_code = status.HTTP_204_NO_CONTENT
+        return {"msg": "No existen registros a cargar en la tabla"}

@@ -12,18 +12,23 @@ class crud:
         # formato: Año-Mes-Día
 
         df_y = yf.download("GOOGL", "2015-1-1", "2018-12-31")
-
+        
         # Sacamos el indice a una columna llamada Date
         df_y = df_y.rename_axis('Date').reset_index() 
         # Generamos el DataFrame con los campos que queremos tener   
         df_y = pd.DataFrame(df_y, columns = ['Date','Open', 'High', 'Low', 'Close', 'Volume'])
+        num_registros = len(df_y)
+        print(num_registros)
+        if num_registros != 0:
 
-        # Lo convertimos en lista de diccionarios para cargarlo a la BBDD Mongo
-        df_y_dic = df_y.to_dict('records')
+            # Lo convertimos en lista de diccionarios para cargarlo a la BBDD Mongo
+            df_y_dic = df_y.to_dict('records')
 
-        db = connect(nombredb)
+            db = connect(nombredb)
 
-        db[coleccion].insert_many(df_y_dic)
+            db[coleccion].insert_many(df_y_dic)
+        
+        return num_registros
 
     def mostrar_datos_coleccion(nombredb, coleccion):
         # conexión a base de datos
