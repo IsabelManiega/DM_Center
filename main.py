@@ -7,12 +7,12 @@ from connection import connect
 from CRUD import crud
 import quandl
 import yfinance as yf
-import dask.dataframe as dd 
+import dask.dataframe as dd
+import datetime 
 
 crud.createDatabase()
 crud.createTablaNotas()
 crud.createTablaAmazon()
-
 
 tags_metadata=[
     {
@@ -211,11 +211,45 @@ async def get_Fechas():
     pass
 
 # POST quandl/yfinance: Luis
-@app.post("/insertar/", status_code=status.HTTP_201_CREATED, tags=["FINANZAS"],
+@app.post("/postAmazon/", status_code=status.HTTP_201_CREATED, tags=["FINANZAS"],
           description="POST: realizar una petición por fecha a quandl/yfinance e insertar en base de datos.")
-async def post_quandl_yfinance():
-    pass
+async def postAmzn():
+    print("Principio función")
+    cur, conn = connect()
 
+    try:
+        data = quandl.get("WIKI/AMZN", start_date="2015-01-01", end_date="2018-12-31")
+        print("Datos insertados con Quandl")
+    except:
+        data = yf.download("AMZN", "2015-1-1", "2018-12-31")
+        print("Datos insertados con Yahoo Finance")
+
+    data = data[["Open","High","Low","Close","Volume"]]
+    try:
+        print("Borrando datos anteriores")
+        
+        cur.execute("DELETE FROM amazon;")
+        print("Datos borrados")
+        print(data.head())
+        for index, row in data.iterrows():
+            query = "INSERT INTO amazon (date, open, high, low, close, volume) "
+            op = float(row["Open"])
+            hi = float(row["High"])
+            low = float(row["Low"])
+            cl = float(row["Close"])
+            vol = float (row["Volume"])
+            query += "VALUES('{0}', {1}, {2}, {3}, {4}, {5});".format(index,op,hi,low,cl,vol)
+            cur.execute(query)
+            conn.commit()
+        cur.close()
+        conn.close()
+        return "Datos insertados en la base de datos"
+    except psycopg2.Error as e:
+        cur.close()
+        conn.close()
+        return "Error al insertar los datos {0}".format(e)
+
+    
 
 # GET: Jessenia
 @app.get("/getData/", status_code=status.HTTP_200_OK, tags=["FINANZAS"],

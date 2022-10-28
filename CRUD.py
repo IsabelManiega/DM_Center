@@ -49,8 +49,7 @@ class crud:
         cur, conn = connect()
         try:
             query = "CREATE TABLE amazon"
-            query += "(Id SERIAL PRIMARY KEY, "
-            query += "Date date, "
+            query += "(Date date PRIMARY KEY, "
             query += "Open real, " 
             query += "High real, " 
             query += "Low real, "
