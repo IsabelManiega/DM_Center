@@ -43,6 +43,27 @@ class crud:
         cur.close()
         conn.close()
 
+
+    def createTablaAmazon():
+        # Conexión a base de datos PostgreSQL
+        cur, conn = connect()
+        try:
+            query = "CREATE TABLE amazon"
+            query += "(Id SERIAL PRIMARY KEY, "
+            query += "Date date, "
+            query += "Open real, " 
+            query += "High real, " 
+            query += "Low real, "
+            query += "Close real, "
+            query += "Volume real);"
+            cur.execute(query)
+        except psycopg2.Error as e:
+            return str(e)
+
+        conn.commit()
+        cur.close()
+        conn.close()
+
     def mostrar(tabla, column, valor, response):
         # Conexión a base de datos PostgreSQL
         cur, conn = connect()
