@@ -211,25 +211,25 @@ async def get_Fechas():
     pass
 
 # POST quandl/yfinance: Luis
-@app.post("/postAmazon/", status_code=status.HTTP_201_CREATED, tags=["FINANZAS"],
+@app.post("/postAmazon/{fecha_inicio},{fecha_fin}", status_code=status.HTTP_201_CREATED, tags=["FINANZAS"],
           description="POST: realizar una petición por fecha a quandl/yfinance e insertar en base de datos.")
-async def postAmzn():
+async def postAmzn(fecha_inicio:datetime.date,fecha_fin:datetime.date, response:Response):
     print("Principio función")
     cur, conn = connect()
-
+    if fecha_inicio > fecha_fin: return "Error: Fechas incorrectas"
     try:
-        data = quandl.get("WIKI/AMZN", start_date="2015-01-01", end_date="2018-12-31")
+        data = quandl.get("WIKI/AMZN", start_date=fecha_inicio, end_date=fecha_fin)
         print("Datos insertados con Quandl")
     except:
-        data = yf.download("AMZN", "2015-1-1", "2018-12-31")
+        data = yf.download("AMZN", fecha_inicio, fecha_fin)
         print("Datos insertados con Yahoo Finance")
 
     data = data[["Open","High","Low","Close","Volume"]]
     try:
         print("Borrando datos anteriores")
-        
         cur.execute("DELETE FROM amazon;")
         print("Datos borrados")
+        
         print(data.head())
         for index, row in data.iterrows():
             query = "INSERT INTO amazon (date, open, high, low, close, volume) "
