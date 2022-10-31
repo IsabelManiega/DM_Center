@@ -205,10 +205,23 @@ async def bienvenida():
     # return {"msg": "Bienvenido a nuestra Api Rest del Mercado Global"}
 
 # GET/fechas: Rosana
-@app.get("/getFechas/", status_code=status.HTTP_200_OK, tags=["FINANZAS"],
+@app.get("/getFechas/{date}", status_code=status.HTTP_200_OK, tags=["FINANZAS"],
          description="GET/Fechas: mostrar los datos por fechas concretas.")
-async def get_Fechas():
-    pass
+async def get_Fechas(date:str, response: Response):
+    cur, conn = connect()
+    try:
+        date = datetime.datetime.strptime(date, "%Y-%m-%d")
+        cur.execute(f"SELECT * FROM amazon WHERE date = '{date}';")
+        row = cur.fetchall()
+        cur.close()
+        conn.close()
+        return row
+    except psycopg2.Error as e:
+        response.status_code=status.HTTP_404_NOT_FOUND
+        cur.close()
+        conn.close()
+        return "Error mostrando datos por fecha: %s" % str(e)
+   
 
 # POST quandl/yfinance: Luis
 @app.post("/postAmazon/{fecha_inicio},{fecha_fin}", status_code=status.HTTP_201_CREATED, tags=["FINANZAS"],
