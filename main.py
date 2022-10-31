@@ -8,7 +8,8 @@ from CRUD import crud
 import quandl
 import yfinance as yf
 import dask.dataframe as dd
-import datetime 
+import datetime
+import pandas as pd
 
 crud.createDatabase()
 crud.createTablaNotas()
@@ -263,10 +264,8 @@ async def get_data():
 async def get_describe():
     
     cur, conn = connect()
-     
-    BBDD = 'notas'
     try:
-        pass
+        # pass
     # Equivalent to:
     # SELECT * FROM chapterFour.violations  #https://livebook.manning.com/book/data-science-at-scale-with-python-and-dask/chapter-4/84 
     # df = dd.read_sql_table('BBDD', conn, npartitions=10, index_col='id') 
@@ -274,7 +273,13 @@ async def get_describe():
     # rows = cur.fetchall()
     # df_dask = dd.read_csv("yellow_tripdata.csv", asume_missing=True)
     # return df_dask.describe().compute()
-    
+        df = pd.read_sql('SELECT * FROM amazon', conn)
+        # print(df)
+        ddf = dd.from_pandas(df, npartitions=3)
+        # print(ddf.compute())
+        ddf_describe = ddf.describe().compute()
+        # print(ddf_describe)
+        return ddf_describe
     except psycopg2.Error as e:
         print("Error al mostrar data frame: %s" %str(e))
 
