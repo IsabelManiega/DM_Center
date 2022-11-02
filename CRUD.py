@@ -2,6 +2,7 @@ import pymongo
 import pandas as pd
 import yfinance as yf
 from connection_generica import connect
+import dask.dataframe as dd
 
 
 class crud:
