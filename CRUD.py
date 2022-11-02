@@ -39,3 +39,18 @@ class crud:
         datos = db[coleccion].find({})
         for dato in datos:
             print(dato)
+
+    def mostrar_describe(nombredb, coleccion):
+        db = connect(nombredb)
+        cotizaciones = db.coleccion.find({})
+        lista_cotizaciones = []
+        for fila in cotizaciones:
+            del fila["_id"]
+            lista_cotizaciones.append(fila)
+        df_pandas = pd.DataFrame(lista_cotizaciones, columns=["Date","Open","High","Low","close","Volume"])
+        df_dask = dd.from_pandas(df_pandas,npartitions=1)
+        df_dask = df_dask.describe().compute()
+        print(df_dask)
+        diccionario = df_dask.to_dict()
+        print(diccionario)
+        return diccionario

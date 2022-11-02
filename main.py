@@ -143,3 +143,12 @@ async def post(response: Response):
     else:
         response.status_code = status.HTTP_204_NO_CONTENT
         return {"msg": "No existen registros a cargar en la tabla"}
+
+# Mostrar el listado: GET
+@app.get("/GetDescribe/", status_code=status.HTTP_200_OK, tags=["Finanzas"],
+         description="Muestra el describe de finanzas")
+async def Muestra_describe():
+    nombredb="DBGoogle"
+    coleccion="Yfinance"
+    dic1 = crud.mostrar_describe(nombredb, coleccion)
+    return dic1
