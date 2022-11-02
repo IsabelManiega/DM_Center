@@ -105,10 +105,28 @@ async def showOne(id_buscar: int, response: Response):
 #  Insertar un dato en es listado: POST
 @app.post("/postData/", status_code=status.HTTP_201_CREATED, tags=["PENDIENTES"],
           description="Insertar un registro")
-async def insert(item: User):
-    # database.append(item.dict())
-    return item
-
+async def insert(item: User, response: Response):
+     
+    cur, conn = connect()
+    try:
+        cur.execute(f"INSERT INTO notas (Nombre, Edad, Notas, Fecha) VALUES('{item.Nombre}', {item.Edad}, {item.Notas}, '{item.Fecha}');")
+        
+        conn.commit()   
+        cur.close()
+        conn.close()
+        response.status_code = status.HTTP_200_OK
+        return {"msg": ["Se han insertado los datos correctamente"]}
+    except psycopg2.Error as e:
+        response.status_code=status.HTTP_404_NOT_FOUND
+        print("Error actualizar registro: %s" % str(e))
+        conn.rollback()
+        cur.close()
+        conn.close()
+        print(f'Se han añadido los datos correctamente. registros borrados {cur.rowcount}')
+        return "Error registro: %s" % str(e)
+   
+    
+    
 # Actualizar un dato del listado: PUT
 @app.put("/putData/{id}", status_code=status.HTTP_200_OK, tags=["PENDIENTES"],
          description="Actualizar un registro")
