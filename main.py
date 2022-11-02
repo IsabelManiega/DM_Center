@@ -114,7 +114,7 @@ async def insert(item: User, response: Response):
         conn.commit()   
         cur.close()
         conn.close()
-        response.status_code = status.HTTP_200_OK
+        
         return {"msg": ["Se han insertado los datos correctamente"]}
     except psycopg2.Error as e:
         response.status_code=status.HTTP_404_NOT_FOUND
