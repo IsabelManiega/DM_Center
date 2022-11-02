@@ -209,7 +209,10 @@ async def bienvenida():
 @app.get("/getFechas/{date}", status_code=status.HTTP_200_OK, tags=["FINANZAS"],
          description="GET/Fechas: mostrar los datos por fechas concretas.")
 async def get_Fechas(date:str, response: Response):
+
+    # Conexión a base de datos PostgreSQL
     cur, conn = connect()
+
     try:
         date = datetime.datetime.strptime(date, "%Y-%m-%d")
         cur.execute(f"SELECT * FROM amazon WHERE date = '{date}';")
@@ -219,8 +222,11 @@ async def get_Fechas(date:str, response: Response):
         return row
     except psycopg2.Error as e:
         response.status_code=status.HTTP_404_NOT_FOUND
+
+        # Actualizamos y cerramos la base de datos
         cur.close()
         conn.close()
+        
         return "Error mostrando datos por fecha: %s" % str(e)
    
 
