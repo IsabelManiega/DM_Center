@@ -266,10 +266,30 @@ async def postAmzn(fecha_inicio:datetime.date,fecha_fin:datetime.date, response:
     
 
 # GET: Jessenia
-@app.get("/getData/", status_code=status.HTTP_200_OK, tags=["FINANZAS"],
+@app.get("/getAmazon/", status_code=status.HTTP_200_OK, tags=["FINANZAS"],
          description="GET: muestra los datos que hay en base de datos.")
-async def get_data():
-    pass
+async def showAmazon():
+    try:
+        lista_datos=[]
+        datos={}
+        cur, conn = connect()
+        cur.execute("SELECT * FROM amazon;")
+        rows = cur.fetchall()
+        for row in rows:
+            datos["Date"]=row[0]
+            datos["Open"]=row[1]
+            datos["High"]=row[2]
+            datos["Low"]=row[3]
+            datos["Close"]=row[4]
+            datos["Volume"]=row[5]
+            lista_datos.append(datos)
+            datos={}
+    except psycopg2.Error as e:
+         return {f"msg":"Error al mostrar registros: %s" % str(e) }
+    finally:
+        cur.close()
+        conn.close()
+        return lista_datos
 
 # GET/describe/mostar: Fernanda
 @app.get("/getDescribe/", status_code=status.HTTP_200_OK, tags=["FINANZAS"],
