@@ -145,7 +145,7 @@ async def post(response: Response):
         return {"msg": "No existen registros a cargar en la tabla"}
 
 # Mostrar el listado: GET
-@app.get("/GetDescribe/", status_code=status.HTTP_200_OK, tags=["Finanzas"],
+@app.get("/GetDescribe/", status_code=status.HTTP_200_OK, tags=["FINANZAS"],
          description="Muestra el describe de finanzas")
 async def Muestra_describe():
     nombredb="DBGoogle"
