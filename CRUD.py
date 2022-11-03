@@ -1,7 +1,7 @@
 import pymongo
 import pandas as pd
 import yfinance as yf
-from connection_generica import connect
+from connection import connect
 import dask.dataframe as dd
 
 

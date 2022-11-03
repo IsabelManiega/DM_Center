@@ -6,8 +6,9 @@ from connection import connect
 import pandas as pd
 import yfinance as yf
 from CRUD import crud
+import settings
 
-db = connect()
+db = connect(settings.DATABASE)
 
 tags_metadata=[
     {
@@ -46,7 +47,7 @@ async def info():
 @app.get("/getData/", status_code=status.HTTP_200_OK, tags=["Empleados"],
          description="Muestra todos los empleados")
 async def show():
-    empleados = db.Empleados.find({})
+    empleados = db[settings.COLECTION_2].find({})
     lista_empleados = []
     for fila in empleados:
         del fila["_id"]
@@ -59,7 +60,7 @@ async def show():
          description="Mostrar un empleado")
 async def showOne(numero_empleado: int, response: Response):
     try:
-        empleado = db.Empleados.find_one({"numero_empleado": numero_empleado})
+        empleado = db[settings.COLECTION_2].find_one({"numero_empleado": numero_empleado})
         empleado["_id"] = str(empleado["_id"])
         return empleado
     except:
@@ -76,7 +77,7 @@ async def insertManyEx(response: Response):
         {"numero_empleado": 3,"nombre": "Amparo Mayoral", "edad": 28, "cargo": "Junior","departamento":"Programación", "salario": 1500},
         {"numero_empleado": 4,"nombre": "Juan Martinez", "edad": 30, "cargo": "Senior","departamento":"Arte", "salario": 2300}
     ]
-    db.Empleados.insert_many(dict_list)
+    db[settings.COLECTION_2].insert_many(dict_list)
     response.status_code = status.HTTP_200_OK
     return "Ejemplos insertados"
 
@@ -84,7 +85,7 @@ async def insertManyEx(response: Response):
 @app.post("/postData/", status_code=status.HTTP_201_CREATED, tags=["Empleados"],
           description="Insertar un Empleado")
 async def insert(item: Empleado):
-    db.Empleados.insert_one(item.dict())
+    db[settings.COLECTION_2].insert_one(item.dict())
     return item
 
 # Actualizar un dato del listado: PUT
@@ -92,10 +93,10 @@ async def insert(item: Empleado):
          description="Actualizar empleado")
 async def update(item: Empleado, numero_empleado: int, response: Response):
     try:
-        empleado = db.Empleados.find_one({"numero_empleado": numero_empleado})
+        empleado = db[settings.COLECTION_2].find_one({"numero_empleado": numero_empleado})
         dict=item.dict()
         for k,v in dict.items():
-            db.Empleados.update_one({"_id":empleado["_id"]},{"$set":{k:v}})
+            db[settings.COLECTION_2].update_one({"_id":empleado["_id"]},{"$set":{k:v}})
         response.status_code = status.HTTP_200_OK
         return item
     except:
@@ -107,8 +108,8 @@ async def update(item: Empleado, numero_empleado: int, response: Response):
             description="Eliminar un usuario")
 async def deleteOne(numero_empleado: int, response: Response):
     try:
-        empleado = db.Empleados.find_one({"numero_empleado": numero_empleado})
-        db.Empleados.delete_one({"_id":empleado["_id"]})
+        empleado = db[settings.COLECTION_2].find_one({"numero_empleado": numero_empleado})
+        db[settings.COLECTION_2].delete_one({"_id":empleado["_id"]})
         response.status_code = status.HTTP_204_NO_CONTENT
         return {"numero_empleado": numero_empleado, "msg": "Eliminado"}
     except:
@@ -120,7 +121,7 @@ async def deleteOne(numero_empleado: int, response: Response):
             description="Eliminar todos los empleados")
  
 async def delete(response: Response):
-    db.Empleados.delete_many({})
+    db[settings.COLECTION_2].delete_many({})
     response.status_code = status.HTTP_200_OK
     return {"msg": []}
 
@@ -133,10 +134,7 @@ async def delete(response: Response):
 @app.post("/insertYFinance/", status_code=status.HTTP_200_OK, tags=["FINANZAS"],
          description="Carga cotización Google de YFinance")
 async def post(response: Response):
-    
-    nombredb="DBGoogle"
-    coleccion="Yfinance"
-    num_registros= crud.insertDocument(nombredb, coleccion)
+    num_registros= crud.insertDocument(settings.DATABASE, settings.COLECTION_1)
     if num_registros != 0:
         response.status_code = status.HTTP_200_OK
         return "Tabla Creada y datos YFinance cargados"
@@ -148,7 +146,5 @@ async def post(response: Response):
 @app.get("/GetDescribe/", status_code=status.HTTP_200_OK, tags=["FINANZAS"],
          description="Muestra el describe de finanzas")
 async def Muestra_describe():
-    nombredb="DBGoogle"
-    coleccion="Yfinance"
-    dic1 = crud.mostrar_describe(nombredb, coleccion)
+    dic1 = crud.mostrar_describe(settings.DATABASE, settings.COLECTION_1)
     return dic1
