@@ -148,3 +148,11 @@ async def post(response: Response):
 async def Muestra_describe():
     dic1 = crud.mostrar_describe(settings.DATABASE, settings.COLECTION_1)
     return dic1
+
+# Mostrar el listado: delete
+@app.delete("/insertYFinance/{fecha}", tags=["FINANZAS"],
+            description="Eliminar una FINANZAS ")
+async def deleteOne(fecha, response: Response):
+    cadena= crud.eliminar_registro(settings.DATABASE, settings.COLECTION_1,fecha)
+    return cadena
+    

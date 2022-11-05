@@ -3,6 +3,7 @@ import pandas as pd
 import yfinance as yf
 from connection import connect
 import dask.dataframe as dd
+from datetime import datetime
 
 
 class crud:
@@ -55,3 +56,16 @@ class crud:
         diccionario = df_dask.to_dict()
         print(diccionario)
         return diccionario
+    
+
+    def eliminar_registro(nombredb,coleccion,Fecha):
+        try:
+            db = connect(nombredb)
+            fechalistado = datetime.strptime(Fecha, "%Y-%m-%d")
+            Datos=db[coleccion].find_one({ "Date" : fechalistado})
+            db[coleccion].delete_one({"_id":Datos["_id"]})
+        
+            return {"Fecha": Fecha, "msg": "El registro ha sido Eliminado"}
+        except:
+        
+            return {"Fecha": Fecha, "msg":"Datos  No encontrado"}
