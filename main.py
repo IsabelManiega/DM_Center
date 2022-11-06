@@ -156,8 +156,6 @@ async def Muestra_describe():
 async def getdate(fecha:datetime, response: Response):
     
     try:
-        nombredb="DBGoogle"
-        coleccion="Yfinance"
         datos=crud.mostrar_datos_coleccion_fecha(settings.DATABASE, settings.COLECTION_1,fecha)
         if datos is not None:
             response.status_code = status.HTTP_200_OK
@@ -172,8 +170,6 @@ async def getdate(fecha:datetime, response: Response):
 @app.get("/GETbetweenDATE/{fecha1},{fecha2}", status_code=status.HTTP_200_OK, tags=["FINANZAS"],
          description="Muestra cotización Google de YFinance por fecha")
 async def getbetweendates(fecha1:datetime, fecha2:datetime,response: Response):
-    nombredb="DBGoogle"
-    coleccion="Yfinance"
     datos=crud.mostrar_datos_coleccion_entre_fechas(settings.DATABASE, settings.COLECTION_1,fecha1,fecha2)
     return datos
 
