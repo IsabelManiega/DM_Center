@@ -57,6 +57,31 @@ class crud:
         print(diccionario)
         return diccionario
     
+    
+    def mostrar_datos_coleccion_fecha(nombredb, coleccion,fecha):
+            # conexión a base de datos
+            db = connect(nombredb)
+            dato = db[coleccion].find_one({"Date": fecha})
+            if type(dato)==dict:
+                dato["_id"] = str(dato["_id"])
+            return dato  
+            
+    def mostrar_datos_coleccion_entre_fechas(nombredb, coleccion,fecha1,fecha2):
+        lista_datos=[]
+        try:
+                # conexión a base de datos
+            db = connect(nombredb)
+            datos = db[coleccion].find({"$and": [{"Date": {"$gte": fecha1}}, {"Date": {"$lte": fecha2}}]})
+            for dato in datos:
+                del dato["_id"]
+                lista_datos.append(dato)
+            return lista_datos
+        except:            
+            return {"Date": fecha1+fecha2, "msg":"Fechas Not Found"}
+
+
+
+    
 
     def eliminar_registro(nombredb,coleccion,Fecha):
         try:

@@ -7,6 +7,7 @@ import pandas as pd
 import yfinance as yf
 from CRUD import crud
 import settings
+from datetime import datetime
 
 db = connect(settings.DATABASE)
 
@@ -148,6 +149,33 @@ async def post(response: Response):
 async def Muestra_describe():
     dic1 = crud.mostrar_describe(settings.DATABASE, settings.COLECTION_1)
     return dic1
+
+# GET BBDD YFinance date
+@app.get("/GETDATE/{fecha}", status_code=status.HTTP_200_OK, tags=["FINANZAS"],
+         description="Muestra cotización Google de YFinance por fecha")
+async def getdate(fecha:datetime, response: Response):
+    
+    try:
+        nombredb="DBGoogle"
+        coleccion="Yfinance"
+        datos=crud.mostrar_datos_coleccion_fecha(settings.DATABASE, settings.COLECTION_1,fecha)
+        if datos is not None:
+            response.status_code = status.HTTP_200_OK
+            return datos
+        else:
+            response.status_code = status.HTTP_404_NOT_FOUND
+            return {"fecha": fecha, "msg":"Fecha Not Found"}
+    except:
+        response.status_code = status.HTTP_404_NOT_FOUND
+        return {"fecha": fecha, "msg":"Fecha Not Found"}
+
+@app.get("/GETbetweenDATE/{fecha1},{fecha2}", status_code=status.HTTP_200_OK, tags=["FINANZAS"],
+         description="Muestra cotización Google de YFinance por fecha")
+async def getbetweendates(fecha1:datetime, fecha2:datetime,response: Response):
+    nombredb="DBGoogle"
+    coleccion="Yfinance"
+    datos=crud.mostrar_datos_coleccion_entre_fechas(settings.DATABASE, settings.COLECTION_1,fecha1,fecha2)
+    return datos
 
 # Mostrar el listado: delete
 @app.delete("/insertYFinance/{fecha}", tags=["FINANZAS"],
