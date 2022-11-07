@@ -43,6 +43,10 @@ Elimina la información relativa a un usuario en la aplicación.
 
 Elimina la información relativa a todos usuarios en la aplicación.
 
+* [POST] http://127.0.0.1:8000/Filtrar/{edad1}@{edad2}
+
+Devuelve la información relativa de la colección de empleados, que se encuentre entre las dos fechas pasadas por parámetros.
+
 
 3. Funcionalidad Etiqueta "FINANZAS"
 Creados distintos métodos para la gestión en MONGO, y la comunicación de con la base de datos y la colección de las cotizaciones:
