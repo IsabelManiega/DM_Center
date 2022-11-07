@@ -359,32 +359,25 @@ async def showAmazon():
 # GET/describe/mostar: Fernanda
 @app.get("/getDescribe/", status_code=status.HTTP_200_OK, tags=["FINANZAS"],
          description="GET/describe: realizar una petición a la base de datos, crear un dataframe con dask y responder con el describe.")
-async def get_describe():
+async def get_describe(response: Response):
     
     cur, conn = connect()
     try:
-        # pass
-    # Equivalent to:
-    # SELECT * FROM chapterFour.violations  #https://livebook.manning.com/book/data-science-at-scale-with-python-and-dask/chapter-4/84 
-    # df = dd.read_sql_table('BBDD', conn, npartitions=10, index_col='id') 
-    # cur.execute("SELECT * FROM %s ;" %('BBDD'))
-    # rows = cur.fetchall()
-    # df_dask = dd.read_csv("yellow_tripdata.csv", asume_missing=True)
-    # return df_dask.describe().compute()
         df = pd.read_sql('SELECT * FROM amazon', conn)
         # print(df)
         ddf = dd.from_pandas(df, npartitions=3)
         # print(ddf.compute())
         ddf_describe = ddf.describe().compute()
         # print(ddf_describe)
-        return ddf_describe
-    except psycopg2.Error as e:
-        print("Error al mostrar data frame: %s" %str(e))
-
-    conn.commit()
-
-    cur.close()
-    conn.close()
+        response.status_code=status.HTTP_200_OK
+        return ddf_describe        
+    except Exception as e:
+        response.status_code=status.HTTP_404_NOT_FOUND
+        return {f"msg":"Error al mostrar data frame: %s" % str(e) }
+    finally:
+        cur.close()
+        conn.close()
+        
 
 # DELETE (id): Belen 
 @app.delete("/deleteamazon/{date}", status_code=status.HTTP_200_OK, tags=["FINANZAS"],
