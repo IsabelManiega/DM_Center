@@ -78,7 +78,7 @@ utiliza la función mostrar_datos_coleccion_fecha del fichero CRUD.py, para real
 * [GET] http://localhost:8000/get/GETbetweenDATE/{fecha1},{fecha2}
 
 Devuelve los datos de la colección de cotizaciones que se encuentren entre las dos fechas pasada por parémetros.
-utiliza la función getbetweendates del fichero CRUD.py, para realizar el acceso a la colección y devolver los datos entre las dos fecha pasadas por parámetro.
+utiliza la función mostrar_datos_coleccion_entre_fechas del fichero CRUD.py, para realizar el acceso a la colección y devolver los datos entre las dos fecha pasadas por parámetro.
 
 * [GET] http://localhost:8000/GETall/
 
