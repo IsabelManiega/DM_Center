@@ -143,12 +143,24 @@ async def post(response: Response):
         response.status_code = status.HTTP_204_NO_CONTENT
         return {"msg": "No existen registros a cargar en la tabla"}
 
+
+# Mostrar el listado: GET
+@app.get("/GetALL/", status_code=status.HTTP_200_OK, tags=["FINANZAS"],
+         description="Muestra todos los datos de finanzas")
+async def Muestra_todo():
+    cotizacion = db[settings.COLECTION_1].find({})
+    lista_cotizacion = []
+    for fila in cotizacion:
+        del fila["_id"]
+        lista_cotizacion.append(fila)
+    return lista_cotizacion
+
 # Mostrar el listado: GET
 @app.get("/GetDescribe/", status_code=status.HTTP_200_OK, tags=["FINANZAS"],
          description="Muestra el describe de finanzas")
 async def Muestra_describe():
-    dic1 = crud.mostrar_describe(settings.DATABASE, settings.COLECTION_1)
-    return dic1
+    diccionario = crud.mostrar_describe(settings.DATABASE, settings.COLECTION_1)
+    return diccionario
 
 # GET BBDD YFinance date
 @app.get("/GETDATE/{fecha}", status_code=status.HTTP_200_OK, tags=["FINANZAS"],
