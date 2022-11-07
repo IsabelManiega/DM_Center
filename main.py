@@ -187,6 +187,35 @@ async def delete(response: Response):
     response.status_code = status.HTTP_200_OK
     return {"msg": ["Se han eliminado los datos correctamente"]}
 
+# GET/notasbetween: Adrian
+@app.get("/getNotaBetween/{nota1},{nota2}", status_code=status.HTTP_200_OK, tags=["Notas"],
+            description="Mostrar las notas entre nota1 y nota2")
+async def show_between(nota1:float, nota2:float):
+    try:
+        datos_return=[]
+        datos={}
+        cur, conn = connect()
+        if nota1 > nota2:
+            return "msg: Error al mostrar datos: Nota1 debe ser menor que Nota2"
+        cur.execute(f"SELECT * FROM notas WHERE notas BETWEEN {nota1} AND {nota2};")
+        rows = cur.fetchall()
+        for row in rows:
+            datos["Id"]=row[0]
+            datos["Nombre"]=row[1]
+            datos["Edad"]=row[2]
+            datos["Nota"]=row[3]
+            datos["Fecha"]=row[4]
+            datos_return.append(datos)
+            datos={}
+        return datos_return
+    except psycopg2.Error as e:
+         return {f"msg":"Error al mostrar registros: %s" % str(e) }
+    finally:
+        cur.close()
+        conn.close()
+        
+
+
     #__________________________ Actividad Suplementaria _______________________________
 
 """ 
