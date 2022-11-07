@@ -322,10 +322,12 @@ async def postAmzn(fecha_inicio:datetime.date,fecha_fin:datetime.date, response:
             conn.commit()
         cur.close()
         conn.close()
+        response.status_code = status.HTTP_200_OK
         return "Datos insertados en la base de datos"
     except psycopg2.Error as e:
         cur.close()
         conn.close()
+        response.status_code=status.HTTP_408_REQUEST_TIMEOUT
         return "Error al insertar los datos {0}".format(e)
 
     
