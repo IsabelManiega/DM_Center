@@ -192,15 +192,19 @@ async def delete(response: Response):
 # GET/notasbetween: Adrian
 @app.get("/getNotaBetween/{nota1},{nota2}", status_code=status.HTTP_200_OK, tags=["Notas"],
             description="Mostrar las notas entre nota1 y nota2")
-async def show_between(nota1:float, nota2:float):
+async def show_between(nota1:float, nota2:float, response: Response):
     try:
         datos_return=[]
         datos={}
         cur, conn = connect()
         if nota1 > nota2:
+            response.status_code = status.HTTP_412_PRECONDITION_FAILED
             return "msg: Error al mostrar datos: Nota1 debe ser menor que Nota2"
         cur.execute(f"SELECT * FROM notas WHERE notas BETWEEN {nota1} AND {nota2};")
         rows = cur.fetchall()
+        if rows == []:
+            response.status_code = status.HTTP_404_NOT_FOUND
+            return f"msg: No hay datos que cumplan el criterio"
         for row in rows:
             datos["Id"]=row[0]
             datos["Nombre"]=row[1]
@@ -209,9 +213,11 @@ async def show_between(nota1:float, nota2:float):
             datos["Fecha"]=row[4]
             datos_return.append(datos)
             datos={}
+        response.status_code = status.HTTP_200_OK
         return datos_return
     except psycopg2.Error as e:
-         return {f"msg":"Error al mostrar registros: %s" % str(e) }
+        response.status_code = status.HTTP_404_NOT_FOUND
+        return {f"msg":"Error al mostrar registros: %s" % str(e) }
     finally:
         cur.close()
         conn.close()
