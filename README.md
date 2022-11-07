@@ -37,6 +37,10 @@ Elimina la información relativa a un usuario en la aplicación.
 
 Elimina la información relativa a todos usuarios en la aplicación.
 
+* [GET] http://localhost:8000/getNotaBetween/nota1,nota2
+
+Muestra los registros que tienen una nota entre nota1 y nota2
+
 
 
 ----------- Gestión de datos financieros en la tabla Amazon ------------
