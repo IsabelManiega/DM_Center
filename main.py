@@ -282,6 +282,7 @@ async def get_Fechas(date:str, response: Response):
             
         cur.close()
         conn.close()
+        response.status_code=status.HTTP_200_OK
         return datos
         
         return row
@@ -341,7 +342,7 @@ async def postAmzn(fecha_inicio:datetime.date,fecha_fin:datetime.date, response:
 # GET: Jessenia
 @app.get("/getAmazon/", status_code=status.HTTP_200_OK, tags=["FINANZAS"],
          description="GET: muestra los datos que hay en base de datos.")
-async def showAmazon():
+async def showAmazon(response: Response):
     try:
         lista_datos=[]
         datos={}
@@ -357,12 +358,14 @@ async def showAmazon():
             datos["Volume"]=row[5]
             lista_datos.append(datos)
             datos={}
+        response.status_code=status.HTTP_200_OK
+        return lista_datos
     except psycopg2.Error as e:
-         return {f"msg":"Error al mostrar registros: %s" % str(e) }
+        response.status_code=status.HTTP_404_NOT_FOUND
+        return {f"msg":"Error al mostrar registros: %s" % str(e) }
     finally:
         cur.close()
         conn.close()
-        return lista_datos
 
 # GET/describe/mostar: Fernanda
 @app.get("/getDescribe/", status_code=status.HTTP_200_OK, tags=["FINANZAS"],
