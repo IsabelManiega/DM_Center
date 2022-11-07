@@ -21,16 +21,8 @@ tags_metadata=[
         "description": "Bienvenida",
     },
     {
-        "name": "Test",
+        "name": "Notas",
         "description": "Muestra la gestión de la tabla Notas",
-    },
-    {
-        "name": "PENDIENTES",
-        "description":" ",
-    },
-    {
-        "name": "TERMINADOS",
-        "description":" ",
     },
     {
         "name": "FINANZAS",
@@ -45,7 +37,7 @@ app = FastAPI(title="BBDD Test",
               contact={"name": nombres},
               openapi_url="/api/v0.1/openapi.json")
 
-@app.post("/insertar/", status_code=status.HTTP_201_CREATED, tags=["Datos de prueba"],
+@app.post("/insertar/", status_code=status.HTTP_201_CREATED, tags=["Notas"],
           description="Insertar datos de prueba")
 async def Insertar_datos_prueba():
     try:
@@ -70,7 +62,7 @@ async def info():
     return {"msg": "Bienvenido a nuestra Api Rest"}
 
 # Mostrar el listado: GET
-@app.get("/getData/", status_code=status.HTTP_200_OK, tags=["TERMINADOS"],
+@app.get("/getData/", status_code=status.HTTP_200_OK, tags=["Notas"],
          description="Mostrar todos los registros")
 async def show():
     try:
@@ -96,14 +88,14 @@ async def show():
 
 
 # Mostrar un dato listado: GET ID
-@app.get("/getData/{item_id}", status_code=status.HTTP_200_OK, tags=["TERMINADOS"],
+@app.get("/getData/{item_id}", status_code=status.HTTP_200_OK, tags=["Notas"],
          description="Mostrar los datos de un registro")
 async def showOne(id_buscar: int, response: Response):
     
     return crud.mostrar("notas", "id", id_buscar, response)
 
 #  Insertar un dato en es listado: POST
-@app.post("/postData/", status_code=status.HTTP_201_CREATED, tags=["PENDIENTES"],
+@app.post("/postData/", status_code=status.HTTP_201_CREATED, tags=["Notas"],
           description="Insertar un registro")
 async def insert(item: User, response: Response):
      
@@ -128,7 +120,7 @@ async def insert(item: User, response: Response):
     
     
 # Actualizar un dato del listado: PUT
-@app.put("/putData/{id}", status_code=status.HTTP_200_OK, tags=["PENDIENTES"],
+@app.put("/putData/{id}", status_code=status.HTTP_200_OK, tags=["Notas"],
          description="Actualizar un registro")
 async def update(id: int, item: User, response: Response):
 
@@ -148,7 +140,7 @@ async def update(id: int, item: User, response: Response):
     
 
 # Eliminar un dato: Delete
-@app.delete("/deleteData/{item_id}", status_code=status.HTTP_200_OK, tags=["TERMINADOS"],
+@app.delete("/deleteData/{item_id}", status_code=status.HTTP_200_OK, tags=["Notas"],
             description="Eliminar un usuario")
 async def deleteOne(id: int, response: Response):
      # Conexión a base de datos PostgreSQL
@@ -173,7 +165,7 @@ async def deleteOne(id: int, response: Response):
         response.status_code = status.HTTP_200_OK
         return {"msg": ["Se ha elimindo el dato correctamente"]}
 
-@app.delete("/deleteData/", tags=["TERMINADOS"],
+@app.delete("/deleteData/", tags=["Notas"],
             description="Eliminar todos los registros")
 
 async def delete(response: Response):
