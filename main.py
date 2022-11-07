@@ -126,7 +126,7 @@ async def delete(response: Response):
     response.status_code = status.HTTP_200_OK
     return {"msg": []}
 
-# Mostrar el listado: GET
+# Mostrar el listado: GET Etty
 @app.post("/filtrar/{edad1}&{edad2}", status_code=status.HTTP_200_OK, tags=["Empleados"],
          description="Muestra por filtrado")
 async def filtrar(edad1: int, edad2:int):
