@@ -126,6 +126,18 @@ async def delete(response: Response):
     response.status_code = status.HTTP_200_OK
     return {"msg": []}
 
+# Mostrar el listado: GET
+@app.post("/filtrar/{edad1}&{edad2}", status_code=status.HTTP_200_OK, tags=["Empleados"],
+         description="Muestra por filtrado")
+async def filtrar(edad1: int, edad2:int):
+    empleados = db[settings.COLECTION_2].find({"$and": [{"edad": {"$gte": edad1}}, {"edad": {"$lte": edad2}}]},{})
+    lista_empleados = []
+    for fila in empleados:
+        del fila["_id"]
+        lista_empleados.append(fila)
+    return lista_empleados
+
+
 
 #####################################################################################
 #                   GESTION DE BBDD DE COTIZACION DE GOOGLE                       
