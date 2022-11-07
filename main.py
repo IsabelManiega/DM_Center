@@ -30,7 +30,9 @@ tags_metadata=[
     }
 ]
 nombres = "Jerónimo Guitierrez, Francisco Javier Florido, Cristina Lendinez, "
-nombres += "Javier López, Etty Guerra, Carlos Javier Cuenca, Jessenia Gutierrez Nagua, Adrian Mencias Del Olmo, Luis Vallejo Carretero, María Belen Aristizabal, Rosana Longares Herrero, María Mendoza"
+nombres += "Javier López, Etty Guerra, Carlos Javier Cuenca, Jessenia Gutierrez Nagua,\
+            Adrian Mencias Del Olmo, Luis Vallejo Carretero, María Belen Aristizabal,\
+            Rosana Longares Herrero, María Mendoza"
 
 app = FastAPI(title="BBDD Test",
               openapi_tags=tags_metadata,
@@ -251,13 +253,31 @@ async def get_Fechas(date:str, response: Response):
 
     # Conexión a base de datos PostgreSQL
     cur, conn = connect()
+    datos={}
 
-    try:
+    try:        
         date = datetime.datetime.strptime(date, "%Y-%m-%d")
         cur.execute(f"SELECT * FROM amazon WHERE date = '{date}';")
-        row = cur.fetchall()
+        row = cur.fetchall() 
+        if row == []:
+            response.status_code=status.HTTP_404_NOT_FOUND
+            # Actualizamos y cerramos la base de datos
+            cur.close()
+            conn.close()
+            return "Error mostrando datos por fecha"
+            
+        print(row)       
+        datos["Date"]=row[0][0]
+        datos["Open"]=row[0][1]
+        datos["High"]=row[0][2]
+        datos["Low"]=row[0][3]
+        datos["Close"]=row[0][4]
+        datos["Volume"]=row[0][5]
+            
         cur.close()
         conn.close()
+        return datos
+        
         return row
     except psycopg2.Error as e:
         response.status_code=status.HTTP_404_NOT_FOUND
@@ -376,7 +396,10 @@ async def delete_date(date: str, response: Response):
     try:
         date = datetime.datetime.strptime(date, '%Y-%m-%d' )
         query = f"DELETE FROM amazon WHERE Date = '{date}';"
-        cur.execute(query)
+        output = cur.execute(query)
+        if output == None:
+            response.status_code=status.HTTP_404_NOT_FOUND
+            return "Registro no encontrado"
         conn.commit()
     except psycopg2.Error as e:
         response.status_code=status.HTTP_404_NOT_FOUND
